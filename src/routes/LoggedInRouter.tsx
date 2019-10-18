@@ -16,6 +16,7 @@ class LoggedInRouter extends Component {
         <Route exact path="/app/profile/email/:email" component={Profile} />
         <Route exact path="/app/profile/editMyProfile" component={EditProfile} />
         <Route exact path="/app/messenger" component={Messenger} />
+        <Route exact path="/app/messenger/channel/:channelId" component={Messenger} />
       </Router>
     );
   }

@@ -18,7 +18,7 @@ class ProjectCard extends React.Component<ProjectCardProps, ProjectCardState> {
     data.getUserFromEmail(this.props.data.user_email).then(this.setUserDetail);
   }
   setUserDetail = userData => {
-    let name = userData.displayName || userData.email;
+    let name = data.getUserName(userData);
     this.setState({ name: name, img: userData.photoURL });
   };
   showProject = () => {};

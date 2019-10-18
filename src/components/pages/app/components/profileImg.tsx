@@ -3,6 +3,7 @@ import { Component } from "react";
 import LoadIcon from "./loadIcon";
 export interface ProfileImgProps {
   img: any;
+  picClasses?: string;
 }
 
 export interface ProfileImgState {}
@@ -24,7 +25,7 @@ class ProfileImg extends React.Component<ProfileImgProps, ProfileImgState> {
         {" "}
         {img !== "load" || !img ? (
           <img
-            className="w-10 h-10 rounded-full mr-4"
+            className={this.props.picClasses || "w-10 h-10 rounded-full mr-4"}
             src={img}
             alt="User"
           />

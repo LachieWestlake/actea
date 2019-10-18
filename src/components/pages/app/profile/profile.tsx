@@ -31,6 +31,12 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
         .then(this.setUserDetail);
     }
   }
+  message = async () => {
+    let myEmail:string = authUser.getEmail() || ""
+    let receiverEmail:string = this.state.email || ""
+    let newChat = await data.createNewChannel([myEmail, receiverEmail])
+    window.location.replace(`/app/messenger/channel/${newChat}`);
+  }
   setUserDetail = userData => {
     console.log(userData);
     this.setState({
@@ -65,7 +71,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               </div>
               <div className="flex mb-4">
                 <div className="w-1/2"><i className="fas fa-user-plus"></i><br />Connect</div>
-                <div className="w-1/2"><i className="fas fa-comment"></i><br/>Message</div>
+                <div className="w-1/2 cursor-pointer" onClick={this.message}><i className="fas fa-comment"></i><br/>Message</div>
               </div>
               <Link to="/app/projects">
                 <button className="mb-4 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded-full">

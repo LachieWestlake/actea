@@ -69,11 +69,103 @@ class Data {
       .get();
     return userData.data();
   }
-  setUserData(email: String, newData: Object){
+  setUserData(email: String, newData: Object) {
     this.database
-    .collection("users")
-    .doc(email)
-    .set(newData, { merge: true });
+      .collection("users")
+      .doc(email)
+      .set(newData, { merge: true });
+  }
+  async getUserChannelsFromFirebase() {
+    let email = authUser.getEmail();
+    if (email) {
+      let channels: Array<any> = [];
+      let channelsRef = await this.database
+        .collection("channels")
+        .where(new firebase.firestore.FieldPath(`people`, email), "==", true)
+        .get();
+      channelsRef.forEach(channel => {
+        channels.push(channel.id);
+      });
+      return channels;
+    }
+    return [];
+  }
+  getChannelInfoFromFirebase(channelId, callback) {
+    console.log(channelId);
+    this.database
+      .collection("channels")
+      .doc(channelId)
+      .onSnapshot(querySnapshot => {
+        callback(querySnapshot.data());
+      });
+  }
+
+  getUserName(userData) {
+    return userData.displayName || userData.email;
+  }
+
+  getChannelMessagesFromFirebase(channelId, callback) {
+    this.database
+      .collection("channels")
+      .doc(channelId)
+      .collection("messages")
+      .orderBy("date", "desc")
+      .onSnapshot(querySnapshot => {
+        let messages: Array<any> = [];
+        querySnapshot.forEach(function(doc) {
+          messages.push(doc.data());
+          callback(messages);
+        });
+      });
+  }
+  sendNewMessageToChannel(channelId: string, message: string) {
+    this.database
+      .collection("channels")
+      .doc(channelId)
+      .collection("messages")
+      .add({
+        date: new Date(),
+        text: message
+      });
+      this.database
+      .collection("channels")
+      .doc(channelId)
+      .set({
+        lastMessage: message
+      }, {merge:true});
+  }
+
+  async createNewChannel(users: Array<string>) {
+    let matchingChannelsFound = await this.database
+      .collection("channels")
+      .where(new firebase.firestore.FieldPath(`people`, users[0]), "==", true)
+      .where(new firebase.firestore.FieldPath(`people`, users[1]), "==", true)
+      .get();
+
+    if (!matchingChannelsFound.empty) {
+      let matchingChannelsProcessed = matchingChannelsFound.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      matchingChannelsProcessed = matchingChannelsProcessed.filter(
+        channel => Object.keys(channel.people).length == 2
+      );
+      console.log(matchingChannelsProcessed);
+      if (matchingChannelsProcessed[0]) {
+        console.log(matchingChannelsProcessed);
+        return matchingChannelsProcessed[0].id;
+      }
+    }
+
+    let usersHashMap = {};
+    users.forEach(value => {
+      usersHashMap[value] = true;
+    });
+    let addCollection = await this.database.collection("channels").add({
+      lastMessage: "Create A New Message...",
+      people: usersHashMap
+    })
+    return addCollection.id;
   }
 }
 let data: Data = new Data();

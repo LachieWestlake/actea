@@ -21,11 +21,7 @@ class Auth {
   }
   getEmail() {
     let currentUser = firebase.auth().currentUser;
-    if (currentUser) {
-      return currentUser.email;
-    } else {
-        return false;
-    }
+    return currentUser ? currentUser.email : "";
   }
 }
 
