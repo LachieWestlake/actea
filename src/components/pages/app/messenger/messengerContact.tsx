@@ -23,13 +23,15 @@ class MessengerContact extends React.Component<
   }
 
   renderChannelInfo = channelInfo => {
-    console.log(channelInfo)
-    let peopleArray: Array<string> = Object.entries(channelInfo.people).filter(([_, v]) => v).map((x)=>x[0]);
+    console.log(channelInfo);
+    let peopleArray: Array<string> = Object.entries(channelInfo.people)
+      .filter(([_, v]) => v)
+      .map(x => x[0]);
     this.setState({ lastMessage: channelInfo.lastMessage });
-      peopleArray = peopleArray.filter(item => item !== authUser.getEmail());
-      let name = peopleArray.join(', ');
-      this.setState({ name })
-      data.getUserFromEmail(peopleArray[0]).then(this.renderUserData);
+    peopleArray = peopleArray.filter(item => item !== authUser.getEmail());
+    let name = peopleArray.join(", ");
+    this.setState({ name });
+    data.getUserFromEmail(peopleArray[0]).then(this.renderUserData);
   };
 
   renderUserData = userData => {
@@ -40,9 +42,9 @@ class MessengerContact extends React.Component<
   render() {
     return (
       <Link to={`/app/messenger/channel/${this.props.channelId}`}>
-        <div className="max-w-sm rounded-lg ml-6 mr-2 mb-4 overflow-hidden shadow-lg flex bg-white">
+        <div className="flex">
           <ProfileImg
-            picClasses="h-16 w-16 rounded-full mx-auto mt-4 flex-no-shrink"
+            picClasses="h-16 w-16 rounded-full mx-auto flex-no-shrink"
             img={this.state.image}
           />
           <div className="p-4 overflow-hidden">
