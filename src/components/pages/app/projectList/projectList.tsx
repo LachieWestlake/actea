@@ -10,12 +10,12 @@ export interface ProjectListProps {
 export interface ProjectListState {
   projects: Array<Object>;
   hasMore: boolean;
+  loading: boolean
 }
 
 class ProjectList extends React.Component<ProjectListProps, ProjectListState> {
-  state = { projects: [], hasMore: false };
+  state = { projects: [], hasMore: false, loading: true };
   loadNumber = 0;
-  loading = false;
   componentDidMount() {
     this.loadMoreProjects();
   }
@@ -24,19 +24,15 @@ class ProjectList extends React.Component<ProjectListProps, ProjectListState> {
     data.getLatestPosts(this.renderData, this.loadNumber, this.props.user?this.props.user:"");
   };
   renderData = (data: Array<Object>) => {
-    this.setState({ projects: data });
+    this.setState({ projects: data, loading: false })
+    ;
   };
-
+  
   render() {
-    const Loader =
-      this.state.projects.length === 0 ? (
-        <LoadIcon />
-      ) : (
-        false 
-      );
+    {if(this.state.loading ) return <LoadIcon></LoadIcon>}
+    {if(this.state.projects.length !== 0)
     return (
       <div className="py-3" key={(new Date()).getTime()}>
-        {Loader}
         {this.state.projects.map((data, index) => (
           <ProjectCard key={index} data={data} />
         ))}
@@ -48,6 +44,13 @@ class ProjectList extends React.Component<ProjectListProps, ProjectListState> {
         </button>
       </div>
     );
+    else{
+      return <h1>Doesn't look like you have joined a project yet</h1>
+        }
+        }
+   
+
+        
   }
 }
 
