@@ -7,18 +7,24 @@ alt="desktop mockup"/>
 
 ## Join Us
 As a part of Actea, students will be offered an opportunity to:
-  •  Real world technical experience with the latest technology stacks
-  •  Receive the guidance of other developers who have worked in a variety of roles
-  •  Network in the diverse student community
+<li>
+  <ul>•  Real world technical experience with the latest technology stacks</ul>
+  <ul>•  Receive the guidance of other developers who have worked in a variety of roles</ul>
+  <ul>•  Network in the diverse student community</ul>
+</li>
+  
+  
+  
 
 ## Trello Board
 https://trello.com/invite/b/ejgi19sp/d44c58e9202c57c0d21659278e1b2d9a/actea
 
 ## To Do
-  •  mid-early 2019 release
-  •  Minimal functionality in diagram done
-  •  have a closed beta phase (+NDAs)
-
+<li>
+  <ul>• mid-early 2019 release </ul>
+  <ul>• Minimal functionality in diagram done </ul>
+  <ul>• have a closed beta phase (+NDAs)</ul>
+</li>
 ## Feature Diagrams
 <img src="https://trello-attachments.s3.amazonaws.com/5ccce36e0d3ad08d0d47d8ae/5ccce39420018b54a91f26f6/7cc4f23dcd98628fbd88a599fc3aed1b/image.png" 
 alt="feature diagram" />
