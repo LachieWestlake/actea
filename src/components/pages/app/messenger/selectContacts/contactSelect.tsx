@@ -3,6 +3,7 @@ import React from "react";
 import AsyncSelect from "react-select/async";
 import makeAnimated from "react-select/animated";
 import data from "../../../../../database/data";
+import {Debounce} from'react-lodash'
 
 const animatedComponents = makeAnimated();
 
@@ -14,12 +15,12 @@ class ContactSelect extends React.Component<
   ContactSelectProps,
   ContactSelectState
 > {
-  state = {};
+  state = {}
   promiseOptions = async inputValue => {
     let emails = await data.getUserListFromPartialEmail(inputValue);
     return emails.map(email => ({
       value: email.email,
-      label: email.email
+      label: `${email.email} ${email.displayName?`- ${email.displayName}`:""}`
     }));
   };
 
@@ -29,7 +30,11 @@ class ContactSelect extends React.Component<
         closeMenuOnSelect={false}
         cacheOptions
         components={animatedComponents}
-        noOptionsMessage={()=><div><i className="fas fa-search"></i>&emsp;Search...</div>}
+        noOptionsMessage={() => (
+          <div>
+            <i className="fas fa-search"></i>&emsp;No Results
+          </div>
+        )}
         isMulti
         loadOptions={this.promiseOptions}
       />
