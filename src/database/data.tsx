@@ -69,6 +69,15 @@ class Data {
       .get();
     return userData.data();
   }
+  async getUserListFromPartialEmail(partialEmail: string) {
+    const userData = await this.database
+      .collection("users")
+      .orderBy("email")
+      .startAt(partialEmail)
+      .endAt(partialEmail + "\uf8ff")
+      .get();
+    return userData.docs.map(doc => doc.data());
+  }
   setUserData(email: String, newData: Object) {
     this.database
       .collection("users")
@@ -127,12 +136,15 @@ class Data {
         date: new Date(),
         text: message
       });
-      this.database
+    this.database
       .collection("channels")
       .doc(channelId)
-      .set({
-        lastMessage: message
-      }, {merge:true});
+      .set(
+        {
+          lastMessage: message
+        },
+        { merge: true }
+      );
   }
 
   async createNewChannel(users: Array<string>) {
@@ -164,7 +176,7 @@ class Data {
     let addCollection = await this.database.collection("channels").add({
       lastMessage: "Create A New Message...",
       people: usersHashMap
-    })
+    });
     return addCollection.id;
   }
 }
