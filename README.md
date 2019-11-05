@@ -7,24 +7,21 @@ alt="desktop mockup"/>
 
 ## Join Us
 As a part of Actea, students will be offered an opportunity to:
-<li>
-  <ul>•  Real world technical experience with the latest technology stacks</ul>
-  <ul>•  Receive the guidance of other developers who have worked in a variety of roles</ul>
-  <ul>•  Network in the diverse student community</ul>
-</li>
+<ul>
+  <li>Real world technical experience with the latest technology stacks</li>
+  <li>Receive the guidance of other developers who have worked in a variety of roles</li>
+  <li>Network in the diverse student community</li>
+</ul>
   
-  
-  
-
 ## Trello Board
 https://trello.com/invite/b/ejgi19sp/d44c58e9202c57c0d21659278e1b2d9a/actea
 
 ## To Do
-<li>
-  <ul>• mid-early 2019 release </ul>
-  <ul>• Minimal functionality in diagram done </ul>
-  <ul>• have a closed beta phase (+NDAs)</ul>
-</li>
+<ul>
+  <li>mid-early 2019 release </li>
+  <li>Minimal functionality in diagram done </li>
+  <li>have a closed beta phase (+NDAs)</li>
+</ul>
 ## Feature Diagrams
 <img src="https://trello-attachments.s3.amazonaws.com/5ccce36e0d3ad08d0d47d8ae/5ccce39420018b54a91f26f6/7cc4f23dcd98628fbd88a599fc3aed1b/image.png" 
 alt="feature diagram" />
@@ -32,7 +29,7 @@ alt="feature diagram" />
 # Start the App
 ## To download 
 
-git clone https://github.com/DeeplyDiligent/actea.git
+```git clone https://github.com/DeeplyDiligent/actea.git```
 
 ## To install dependencies
 
