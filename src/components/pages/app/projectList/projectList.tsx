@@ -27,11 +27,25 @@ class ProjectList extends React.Component<ProjectListProps, ProjectListState> {
     this.setState({ projects: data, loading: false })
     ;
   };
+
+  handleOnSearch=(e)=>{
+    if(e.target.value.length > 0){
+    data.getPostSearchResults(this.renderData, e.target.value, this.props.user?this.props.user:"")
+    }
+    else{
+      data.getLatestPosts(this.renderData, this.loadNumber, this.props.user?this.props.user:"");
+    }
+  }
+
   
   render() {
     {if(this.state.loading ) return <LoadIcon></LoadIcon>}
     {if(this.state.projects.length !== 0)
     return (
+      <div>
+      <div>
+      <input type="text" className="border-2 py-2 px-4 ml-auto mt-4  block rounded-full" name="title" onChange={this.handleOnSearch} placeholder={'Search Here...'}/>
+      </div>
       <div className="py-3" key={(new Date()).getTime()}>
         {this.state.projects.map((data, index) => (
           <ProjectCard key={index} data={data} />
@@ -43,6 +57,8 @@ class ProjectList extends React.Component<ProjectListProps, ProjectListState> {
           Load More
         </button>
       </div>
+      </div>
+
     );
     else{
       return <h1>Doesn't look like you have joined a project yet</h1>

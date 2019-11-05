@@ -34,6 +34,21 @@ class Data {
       loadDone(this.processFirebaseList(data));
     });
   }
+
+  getPostSearchResults(loadDone: Function, search: String, email: String) {
+    let query = this.database
+      .collection("projects")
+      .orderBy("title")
+                 .startAt(search)
+                 .endAt(search+"\uf8ff")
+    if (email) {
+      query = query.where("user_email", "==", email);
+    }
+    return query.onSnapshot(data => {
+      loadDone(this.processFirebaseList(data));
+    });
+  }
+
   processFirebaseList(data: any) {
     let projects: Array<Object> = [];
     data.forEach((i: any) => {
