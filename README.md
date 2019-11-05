@@ -1,68 +1,39 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#Actea – Act on Your Idea
 
-## Available Scripts
+Actea is a social media platform designed to connect those with the vision for new ideas with others who are passionate about their cause. The platform was built for university students with the drive to create a product that resonates with a stable target market. They can collaborate on things like software, hobby clubs, social impact or even make video game teams. By allowing a community to come together, this platform empowers high achieving students to not only study but make a difference. 
 
-In the project directory, you can run:
+<img src="https://trello-attachments.s3.amazonaws.com/5ccce36e0d3ad08d0d47d8ae/5d79f5b903ca7c5570ef5e45/f2d18b52bdafe9af380ae12ed896281e/Screen_Shot_2019-10-19_at_9.45.55_am.png" 
+alt="feature diagram" width="240" height="180" border="0" />
 
-### `npm start`
+##Join Us
+As a part of Actea, students will be offered an opportunity to:
+..*Real world technical experience with the latest technology stacks
+..*Receive the guidance of other developers who have worked in a variety of roles
+..*Network in the diverse student community
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+##Trello Board
+https://trello.com/invite/b/ejgi19sp/d44c58e9202c57c0d21659278e1b2d9a/actea
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+##To Do
+..*mid-early 2019 release
+..*Minimal functionality in diagram done
+..*have a closed beta phase (+NDAs)
 
-### `npm test`
+##Feature Diagrams
+<img src="https://trello-attachments.s3.amazonaws.com/5ccce36e0d3ad08d0d47d8ae/5ccce39420018b54a91f26f6/7cc4f23dcd98628fbd88a599fc3aed1b/image.png " 
+alt="feature diagram" width="240" height="180" border="0" />
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#Start the App
+##To download 
 
-### `npm run build`
+git clone https://github.com/DeeplyDiligent/actea.git
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+##To install dependencies
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+```yarn install```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+##To start 
 
-### `npm run eject`
+```yarn start```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Profit 😎
