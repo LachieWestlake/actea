@@ -84,20 +84,21 @@ class Data {
       .doc(email)
       .set(newData, { merge: true });
   }
-  async getUserChannelsFromFirebase() {
+  getUserChannelsFromFirebase(callback) {
     let email = authUser.getEmail();
     if (email) {
-      let channels: Array<any> = [];
-      let channelsRef = await this.database
+      this.database
         .collection("channels")
         .where(new firebase.firestore.FieldPath(`people`, email), "==", true)
-        .get();
-      channelsRef.forEach(channel => {
-        channels.push(channel.id);
-      });
-      return channels;
+        .onSnapshot(channelsRef => {
+          let channels: Array<any> = [];
+          channelsRef.forEach(channel => {
+            channels.push(channel.id);
+          });
+          callback(channels)
+        });
     }
-    return [];
+    callback([])
   }
   getChannelInfoFromFirebase(channelId, callback) {
     console.log(channelId);
