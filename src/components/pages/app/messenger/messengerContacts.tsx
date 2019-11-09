@@ -13,16 +13,17 @@ class MessengerContacts extends React.Component<
   MessengerContactsProps,
   MessengerContactsState
 > {
-  state = { channels: [] };
+  state = { channels: [], showContactSelect: false };
   componentDidMount() {
-    data.getUserChannelsFromFirebase().then(channels => {
+    data.getUserChannelsFromFirebase(channels => {
       this.setState({ channels });
     });
   }
+  
   render() {
     return (
       <div className="w-1/4 flex">
-        <div className="max-w-sm rounded-lg ml-6 mr-2 mb-4 overflow-hidden shadow-lg bg-white p-3">
+        <div className="max-w-sm rounded-lg ml-6 mr-2 mb-4 overflow-x-hidden shadow-lg bg-white p-3">
           {!this.state.channels.length ? (
             <LoadIcon className="ml-3" />
           ) : (
@@ -31,8 +32,16 @@ class MessengerContacts extends React.Component<
                 return <MessengerContact channelId={channel} key={channel} />;
               })}
               <div className="m-auto text-center">
-                <i className="fas fa-plus rounded-full border p-4 "></i>
-                <MessageContactSelect />
+                <i
+                  className="fas fa-plus rounded-full border p-4 cursor-pointer"
+                  onClick={() =>
+                    this.setState({ showContactSelect: true })
+                  }></i>
+                {this.state.showContactSelect ? (
+                  <MessageContactSelect hideContactSelect={()=>this.setState({ showContactSelect: false })} />
+                ) : (
+                  false
+                )}
               </div>
             </>
           )}
