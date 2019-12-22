@@ -32,11 +32,11 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
     }
   }
   message = async () => {
-    let myEmail:string = authUser.getEmail() || ""
-    let receiverEmail:string = this.state.email || ""
-    let newChat = await data.createNewChannel([myEmail, receiverEmail])
+    let myEmail: string = authUser.getEmail() || "";
+    let receiverEmail: string = this.state.email || "";
+    let newChat = await data.createNewChannel([myEmail, receiverEmail]);
     window.location.replace(`/app/messenger/channel/${newChat}`);
-  }
+  };
   setUserDetail = userData => {
     console.log(userData);
     this.setState({
@@ -65,13 +65,27 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               <div className="text-blue-500 mb-4">{this.state.university}</div>
               <div className="text-purple-500 mb-4">{this.state.email}</div>
               <div className="mb-4">{this.state.tagline}</div>
-              <div className="text-gray-600 mb-4 text-xs whitespace-pre-wrap">{this.state.description}</div>
+              <div className="text-gray-600 mb-4 text-xs whitespace-pre-wrap">
+                {this.state.description}
+              </div>
               <div className="text-gray-600 mb-4">
                 Created <Moment fromNow>{this.state.createdAt}</Moment>
               </div>
-              <div className="flex mb-4">
-                <div className="w-1/2"><i className="fas fa-user-plus"></i><br />Connect</div>
-                <div className="w-1/2 cursor-pointer" onClick={this.message}><i className="fas fa-comment"></i><br/>Message</div>
+              <div className="flex mb-4 justify-center">
+                <div className="w-1/2">
+                  <i className="fas fa-user-plus"></i>
+                  <br />
+                  Connect
+                </div>
+                {this.state.email !== this.state.myEmail ? (
+                  <div className="w-1/2 cursor-pointer" onClick={this.message}>
+                    <i className="fas fa-comment"></i>
+                    <br />
+                    Message
+                  </div>
+                ) : (
+                  false
+                )}
               </div>
               <Link to="/app/projects">
                 <button className="mb-4 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded-full">

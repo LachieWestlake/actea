@@ -19,10 +19,9 @@ class ProfileImg extends React.Component<ProfileImgProps, ProfileImgState> {
     return photo;
   }
   render() {
-    let img =  this.processPhoto(this.props.img)
+    let img = this.processPhoto(this.props.img);
     return (
-      <div>
-        {" "}
+      <div className="flex items-center">
         {img !== "load" || !img ? (
           <img
             className={this.props.picClasses || "w-10 h-10 rounded-full mr-4"}
@@ -31,7 +30,7 @@ class ProfileImg extends React.Component<ProfileImgProps, ProfileImgState> {
           />
         ) : (
           <LoadIcon className="mr-3" />
-        )}{" "}
+        )}
       </div>
     );
   }

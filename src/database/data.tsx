@@ -34,6 +34,21 @@ class Data {
       loadDone(this.processFirebaseList(data));
     });
   }
+
+  getPostSearchResults(loadDone: Function, search: String, email: String) {
+    let query = this.database
+      .collection("projects")
+      .orderBy("title")
+                 .startAt(search)
+                 .endAt(search+"\uf8ff")
+    if (email) {
+      query = query.where("user_email", "==", email);
+    }
+    return query.onSnapshot(data => {
+      loadDone(this.processFirebaseList(data));
+    });
+  }
+
   processFirebaseList(data: any) {
     let projects: Array<Object> = [];
     data.forEach((i: any) => {
@@ -69,26 +84,36 @@ class Data {
       .get();
     return userData.data();
   }
+  async getUserListFromPartialEmail(partialEmail: string) {
+    const userData = await this.database
+      .collection("users")
+      .orderBy("email")
+      .startAt(partialEmail)
+      .endAt(partialEmail + "\uf8ff")
+      .get();
+    return userData.docs.map(doc => doc.data());
+  }
   setUserData(email: String, newData: Object) {
     this.database
       .collection("users")
       .doc(email)
       .set(newData, { merge: true });
   }
-  async getUserChannelsFromFirebase() {
+  getUserChannelsFromFirebase(callback) {
     let email = authUser.getEmail();
     if (email) {
-      let channels: Array<any> = [];
-      let channelsRef = await this.database
+      this.database
         .collection("channels")
         .where(new firebase.firestore.FieldPath(`people`, email), "==", true)
-        .get();
-      channelsRef.forEach(channel => {
-        channels.push(channel.id);
-      });
-      return channels;
+        .onSnapshot(channelsRef => {
+          let channels: Array<any> = [];
+          channelsRef.forEach(channel => {
+            channels.push(channel.id);
+          });
+          callback(channels)
+        });
     }
-    return [];
+    callback([])
   }
   getChannelInfoFromFirebase(channelId, callback) {
     console.log(channelId);
@@ -127,12 +152,15 @@ class Data {
         date: new Date(),
         text: message
       });
-      this.database
+    this.database
       .collection("channels")
       .doc(channelId)
-      .set({
-        lastMessage: message
-      }, {merge:true});
+      .set(
+        {
+          lastMessage: message
+        },
+        { merge: true }
+      );
   }
 
   async createNewChannel(users: Array<string>) {
@@ -164,7 +192,7 @@ class Data {
     let addCollection = await this.database.collection("channels").add({
       lastMessage: "Create A New Message...",
       people: usersHashMap
-    })
+    });
     return addCollection.id;
   }
 }

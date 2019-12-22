@@ -10,12 +10,12 @@ export interface ProjectListProps {
 export interface ProjectListState {
   projects: Array<Object>;
   hasMore: boolean;
+  loading: boolean
 }
 
 class ProjectList extends React.Component<ProjectListProps, ProjectListState> {
-  state = { projects: [], hasMore: false };
+  state = { projects: [], hasMore: false, loading: true };
   loadNumber = 0;
-  loading = false;
   componentDidMount() {
     this.loadMoreProjects();
   }
@@ -24,19 +24,29 @@ class ProjectList extends React.Component<ProjectListProps, ProjectListState> {
     data.getLatestPosts(this.renderData, this.loadNumber, this.props.user?this.props.user:"");
   };
   renderData = (data: Array<Object>) => {
-    this.setState({ projects: data });
+    this.setState({ projects: data, loading: false })
+    ;
   };
 
+  handleOnSearch=(e)=>{
+    if(e.target.value.length > 0){
+    data.getPostSearchResults(this.renderData, e.target.value, this.props.user?this.props.user:"")
+    }
+    else{
+      data.getLatestPosts(this.renderData, this.loadNumber, this.props.user?this.props.user:"");
+    }
+  }
+
+  
   render() {
-    const Loader =
-      this.state.projects.length === 0 ? (
-        <LoadIcon />
-      ) : (
-        false 
-      );
+    {if(this.state.loading ) return <LoadIcon></LoadIcon>}
+    {if(this.state.projects.length !== 0)
     return (
+      <div>
+      <div>
+      <input type="text" className="border-2 py-2 px-4 ml-auto mt-4  block rounded-full" name="title" onChange={this.handleOnSearch} placeholder={'Search Here...'}/>
+      </div>
       <div className="py-3" key={(new Date()).getTime()}>
-        {Loader}
         {this.state.projects.map((data, index) => (
           <ProjectCard key={index} data={data} />
         ))}
@@ -47,7 +57,16 @@ class ProjectList extends React.Component<ProjectListProps, ProjectListState> {
           Load More
         </button>
       </div>
+      </div>
+
     );
+    else{
+      return <h1>Doesn't look like you have joined a project yet</h1>
+        }
+        }
+   
+
+        
   }
 }
 
