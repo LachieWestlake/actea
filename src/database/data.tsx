@@ -6,6 +6,9 @@ import './projectData'
 import './userData'
 import "firebase/firestore";
 import authUser from "../auth/auth";
+import MessageData from "./messageData";
+import ProjectData from "./projectData";
+import UserData from "./userData";
 
 
 class Data {
@@ -32,4 +35,5 @@ let data: Data = new Data();
 let messageData: MessageData = new MessageData();
 let projectData: ProjectData = new ProjectData();
 let userData: UserData = new UserData();
-export default data;
+
+export {data, messageData, projectData, userData};

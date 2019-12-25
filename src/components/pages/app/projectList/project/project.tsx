@@ -1,7 +1,7 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import Loader from "../../components/loader";
-import data from "../../../../../database/data";
+import {projectData} from "../../../../../database/data";
 import LoadIcon from "../../components/loadIcon";
 import Moment from "react-moment";
 import ProfileImg from "../../components/profileImg";
@@ -29,8 +29,8 @@ class Project extends React.Component<
   }
 
   getUserProjectData(){
-    data.getProject(this.props.match.params.id, (projectData: any) => {
-      data
+    projectData.getProject(this.props.match.params.id, (projectData: any) => {
+      projectData
         .getUserFromEmail(projectData.user_email)
         .then((user: any) => this.setState({ user: user, userLoaded: true }));
       this.setState({ projectData, loaded: true });

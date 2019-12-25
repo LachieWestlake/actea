@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Component } from "react";
 import ProjectList from "./projectList";
-import data from "../../../../database/data";
+import {projectData} from "../../../../database/data";
 import ImageUploader from "../components/imageUpload/imageUploader";
 
 export interface CreateNewProjectProps {}
@@ -15,7 +15,7 @@ class CreateNewProject extends React.Component<
   state = { title: "", content: "", showError: false, imageLink:"" ,key:0 };
   createNewPost = () => {
     if (this.state.title && this.state.content) {
-      data.addNewProject(this.state.title, this.state.content, this.state.imageLink);
+      projectData.addNewProject(this.state.title, this.state.content, this.state.imageLink);
       this.clearTitleContent();
     } else {
       this.setState({ showError: true });

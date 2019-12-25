@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
-import data from "../../../../database/data";
+import {messageData} from "../../../../database/data";
 export interface WriteMessageProps {
   channelId;
 }
@@ -19,7 +19,7 @@ class WriteMessage extends React.Component<
     this.sendMessage(this.state.message);
   };
   sendMessage = (message: string) => {
-    data.sendNewMessageToChannel(this.props.channelId, message);
+    messageData.sendNewMessageToChannel(this.props.channelId, message);
     this.setState({ message: "" });
   };
   render() {

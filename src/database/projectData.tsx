@@ -1,6 +1,21 @@
+import {data} from "./data";
+import authUser from "../auth/auth";
+
+
 class ProjectData {
+  
+  getProject(id: string, done: Function) {
+    data.getDatabase()
+      .collection("projects")
+      .doc(id)
+      .get()
+      .then(doc => {
+        done(doc.data());
+      });
+  }
+
     getLatestPosts(loadDone: Function, number: Number, email: String) {
-        let query = this.database
+        let query = data.getDatabase()
           .collection("projects")
           .orderBy("time", "desc")
           .limit(number);
@@ -12,7 +27,7 @@ class ProjectData {
         });
       }
       getPostSearchResults(loadDone: Function, search: String, email: String) {
-        let query = this.database
+        let query = data.getDatabase()
           .collection("projects")
           .orderBy("title")
                      .startAt(search)
@@ -34,7 +49,7 @@ class ProjectData {
         return projects;
       }
       addNewProject(title: string, content: string, imgLink: string) {
-        this.database.collection("projects").add({
+        data.getDatabase().collection("projects").add({
           title: title,
           content: content,
           image: imgLink,
@@ -44,3 +59,4 @@ class ProjectData {
         });
       }
 }
+export default ProjectData

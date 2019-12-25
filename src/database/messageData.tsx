@@ -1,8 +1,12 @@
+import { data } from "./data";
+import authUser from "../auth/auth";
+import * as firebase from "firebase/app";
+
 class MessageData {
   getUserChannelsFromFirebase(callback) {
     let email = authUser.getEmail();
     if (email) {
-      this.database
+      data.getDatabase()
         .collection("channels")
         .where(new firebase.firestore.FieldPath(`people`, email), "==", true)
         .onSnapshot(channelsRef => {
@@ -17,7 +21,7 @@ class MessageData {
   }
   getChannelInfoFromFirebase(channelId, callback) {
     console.log(channelId);
-    this.database
+    data.getDatabase()
       .collection("channels")
       .doc(channelId)
       .onSnapshot(querySnapshot => {
@@ -25,7 +29,7 @@ class MessageData {
       });
   }
   getChannelMessagesFromFirebase(channelId, callback) {
-    this.database
+    data.getDatabase()
       .collection("channels")
       .doc(channelId)
       .collection("messages")
@@ -39,7 +43,7 @@ class MessageData {
       });
   }
   sendNewMessageToChannel(channelId: string, message: string) {
-    this.database
+    data.getDatabase()
       .collection("channels")
       .doc(channelId)
       .collection("messages")
@@ -47,7 +51,7 @@ class MessageData {
         date: new Date(),
         text: message
       });
-    this.database
+    data.getDatabase()
       .collection("channels")
       .doc(channelId)
       .set(
@@ -59,7 +63,7 @@ class MessageData {
   }
 
   async createNewChannel(users: Array<string>) {
-    let channelsCollection = this.database.collection("channels");
+    let channelsCollection = data.getDatabase().collection("channels");
     users.forEach(userEmail => {
       channelsCollection = channelsCollection.where(
         new firebase.firestore.FieldPath(`people`, userEmail),
@@ -85,10 +89,12 @@ class MessageData {
     users.forEach(value => {
       usersHashMap[value] = true;
     });
-    let addCollection = await this.database.collection("channels").add({
+    let addCollection = await data.getDatabase().collection("channels").add({
       lastMessage: "Create A New Message...",
       people: usersHashMap
     });
     return addCollection.id;
   }
 }
+
+export default MessageData

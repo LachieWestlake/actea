@@ -1,6 +1,6 @@
 import firebaseui from "firebaseui";
 import * as firebase from "firebase/app";
-import data from "../../../database/data";
+import {data} from "../../../database/data";
 import "firebaseui/dist/firebaseui.css";
 import authUser from "../../../auth/auth";
 data.initApp();

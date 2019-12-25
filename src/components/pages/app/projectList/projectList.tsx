@@ -1,6 +1,6 @@
 import * as React from "react";
 import ProjectCard from "./projectCard";
-import data from "../../../../database/data";
+import {projectData} from "../../../../database/data";
 import LoadIcon from "../components/loadIcon";
 
 export interface ProjectListProps {
@@ -21,7 +21,7 @@ class ProjectList extends React.Component<ProjectListProps, ProjectListState> {
   }
   loadMoreProjects = () => {
     this.loadNumber += 5; 
-    data.getLatestPosts(this.renderData, this.loadNumber, this.props.user?this.props.user:"");
+    projectData.getLatestPosts(this.renderData, this.loadNumber, this.props.user?this.props.user:"");
   };
   renderData = (data: Array<Object>) => {
     this.setState({ projects: data, loading: false })
@@ -30,10 +30,10 @@ class ProjectList extends React.Component<ProjectListProps, ProjectListState> {
 
   handleOnSearch=(e)=>{
     if(e.target.value.length > 0){
-    data.getPostSearchResults(this.renderData, e.target.value, this.props.user?this.props.user:"")
+      projectData.getPostSearchResults(this.renderData, e.target.value, this.props.user?this.props.user:"")
     }
     else{
-      data.getLatestPosts(this.renderData, this.loadNumber, this.props.user?this.props.user:"");
+      projectData.getLatestPosts(this.renderData, this.loadNumber, this.props.user?this.props.user:"");
     }
   }
 
