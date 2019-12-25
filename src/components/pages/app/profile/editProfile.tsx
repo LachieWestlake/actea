@@ -1,5 +1,5 @@
 import * as React from "react";
-import data from "../../../../database/data";
+import {userData} from "../../../../database/data";
 import authUser from "../../../../auth/auth";
 import LoadIcon from "../components/loadIcon";
 import { Link } from "react-router-dom";
@@ -22,13 +22,13 @@ class EditProfile extends React.Component<EditProfileProps, EditProfileState> {
   componentDidMount() {
     let email = authUser.getEmail();
     if (email) {
-      data.getUserFromEmail(email).then(this.setUserDetail);
+      userData.getUserFromEmail(email).then(this.setUserDetail);
     }
   }
 
   componentWillUnmount() {
     let email = this.state.email;
-    let userData = {
+    let userDataObj = {
       displayName: this.state.displayName,
       img: this.state.img,
       phoneNumber: this.state.phoneNumber,
@@ -36,20 +36,20 @@ class EditProfile extends React.Component<EditProfileProps, EditProfileState> {
       description: this.state.description,
       university: this.state.university
     };
-    if (email) data.setUserData(email!, userData);
+    if (email) userData.setUserData(email!, userData);
   }
 
-  setUserDetail = userData => {
-    console.log(userData);
+  setUserDetail = userDataObj => {
+    console.log(userDataObj);
     this.setState({
-        displayName: userData.displayName || "",
-      img: userData.photoURL || "",
-      email: userData.email || "",
-      tagline: userData.tagline || "",
-      createdAt: userData.createdAt.toDate() || "",
-      phoneNumber: userData.phoneNumber || "",
-      description: userData.description || "",
-      university: userData.university || "",
+        displayName: userDataObj.displayName || "",
+      img: userDataObj.photoURL || "",
+      email: userDataObj.email || "",
+      tagline: userDataObj.tagline || "",
+      createdAt: userDataObj.createdAt.toDate() || "",
+      phoneNumber: userDataObj.phoneNumber || "",
+      description: userDataObj.description || "",
+      university: userDataObj.university || "",
       loading: false
     });
   };

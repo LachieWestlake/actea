@@ -2,7 +2,7 @@ import * as React from "react";
 import { Component } from "react";
 import Messages from "./messages";
 import WriteMessage from "./writeMessage";
-import data from "../../../../database/data";
+import { messageData } from "../../../../database/data";
 export interface MessageFeedProps {
   channelId;
 }
@@ -13,7 +13,7 @@ class MessageFeed extends React.Component<MessageFeedProps, MessageFeedState> {
   state = {messages: []};
   componentDidMount(){
       if(this.props.channelId){
-          data.getChannelMessagesFromFirebase(this.props.channelId,(messages)=>{
+          messageData.getChannelMessagesFromFirebase(this.props.channelId,(messages)=>{
               this.setState({messages})
           })
       }

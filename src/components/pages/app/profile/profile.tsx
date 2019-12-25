@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
-import data from "../../../../database/data";
+import {userData, messageData} from "../../../../database/data";
 import LoadIcon from "../components/loadIcon";
 import Moment from "react-moment";
 import ProjectList from "../projectList/projectList";
@@ -26,7 +26,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   };
   componentDidMount() {
     if (this.props.match.params.email) {
-      data
+      userData
         .getUserFromEmail(this.props.match.params.email)
         .then(this.setUserDetail);
     }
@@ -34,19 +34,20 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   message = async () => {
     let myEmail: string = authUser.getEmail() || "";
     let receiverEmail: string = this.state.email || "";
-    let newChat = await data.createNewChannel([myEmail, receiverEmail]);
+    let newChat = await messageData.createNewChannel([myEmail, receiverEmail]);
+
     window.location.replace(`/app/messenger/channel/${newChat}`);
   };
-  setUserDetail = userData => {
-    console.log(userData);
+  setUserDetail = userDataObj => {
+    console.log(userDataObj);
     this.setState({
-      name: userData.displayName,
-      img: userData.photoURL,
-      email: userData.email,
-      description: userData.description,
-      tagline: userData.tagline,
-      createdAt: userData.createdAt.toDate(),
-      university: userData.university,
+      name: userDataObj.displayName,
+      img: userDataObj.photoURL,
+      email: userDataObj.email,
+      description: userDataObj.description,
+      tagline: userDataObj.tagline,
+      createdAt: userDataObj.createdAt.toDate(),
+      university: userDataObj.university,
       loading: false
     });
   };

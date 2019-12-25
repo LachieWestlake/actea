@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
-import data from "../../../../database/data";
+import {projectData, userData} from "../../../../database/data";
 import LoadIcon from "../components/loadIcon";
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
@@ -15,11 +15,11 @@ export interface ProjectCardState {}
 class ProjectCard extends React.Component<ProjectCardProps, ProjectCardState> {
   state = { name: null, img: "load" };
   componentDidMount() {
-    data.getUserFromEmail(this.props.data.user_email).then(this.setUserDetail);
+    userData.getUserFromEmail(this.props.data.user_email).then(this.setUserDetail);
   }
-  setUserDetail = userData => {
-    let name = data.getUserName(userData);
-    this.setState({ name: name, img: userData.photoURL });
+  setUserDetail = userDataInput => {
+    let name = userData.getUserName(userDataInput);
+    this.setState({ name: name, img: userDataInput.photoURL });
   };
   showProject = () => {};
   render() {

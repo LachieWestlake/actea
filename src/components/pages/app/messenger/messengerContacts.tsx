@@ -2,7 +2,7 @@ import * as React from "react";
 import { Component } from "react";
 import MessengerContact from "./messengerContact";
 import MessageContactSelect from "./selectContacts/messageContactSelect";
-import data from "../../../../database/data";
+import {messageData} from "../../../../database/data";
 import Loader from "../components/loader";
 import LoadIcon from "../components/loadIcon";
 export interface MessengerContactsProps {}
@@ -15,7 +15,7 @@ class MessengerContacts extends React.Component<
 > {
   state = { channels: [], showContactSelect: false };
   componentDidMount() {
-    data.getUserChannelsFromFirebase(channels => {
+    messageData.getUserChannelsFromFirebase(channels => {
       this.setState({ channels });
     });
   }

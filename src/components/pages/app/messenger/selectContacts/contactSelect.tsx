@@ -2,7 +2,7 @@ import React from "react";
 
 import AsyncSelect from "react-select/async";
 import makeAnimated from "react-select/animated";
-import data from "../../../../../database/data";
+import {userData, messageData} from "../../../../../database/data";
 import { Debounce } from "react-lodash";
 import authUser from "../../../../../auth/auth";
 
@@ -22,7 +22,7 @@ class ContactSelect extends React.Component<
 > {
   state = { selected: [] };
   promiseOptions = async inputValue => {
-    let emails = await data.getUserListFromPartialEmail(inputValue);
+    let emails = await userData.getUserListFromPartialEmail(inputValue);
     return emails.map(email => ({
       value: email.email,
       label: `${email.email} ${
@@ -34,7 +34,7 @@ class ContactSelect extends React.Component<
   createChat = async e => {
     if (this.state.selected.length) {
       let myEmail: string = authUser.getEmail() || "";
-      let newChannelId = await data.createNewChannel([
+      let newChannelId = await messageData.createNewChannel([
         myEmail,
         ...this.state.selected.map(x => x["value"])
       ]);

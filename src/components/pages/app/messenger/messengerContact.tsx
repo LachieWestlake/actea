@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
-import data from "../../../../database/data";
+import {messageData, userData} from "../../../../database/data";
 import authUser from "../../../../auth/auth";
 import ProfileImg from "../components/profileImg";
 import { Link } from "react-router-dom";
@@ -16,7 +16,7 @@ class MessengerContact extends React.Component<
 > {
   state = { image: "load", name: "", lastMessage: "" };
   componentDidMount() {
-    data.getChannelInfoFromFirebase(
+    messageData.getChannelInfoFromFirebase(
       this.props.channelId,
       this.renderChannelInfo
     );
@@ -31,7 +31,7 @@ class MessengerContact extends React.Component<
     peopleArray = peopleArray.filter(item => item !== authUser.getEmail());
     let name = peopleArray.join(", ");
     this.setState({ name });
-    data.getUserFromEmail(peopleArray[0]).then(this.renderUserData);
+    userData.getUserFromEmail(peopleArray[0]).then(this.renderUserData);
   };
 
   renderUserData = userData => {
