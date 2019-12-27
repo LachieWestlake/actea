@@ -13,14 +13,16 @@ import LoginPage from "../components/pages/login/loginPage";
 import LoggedInRouter from "./LoggedInRouter";
 import authUser from "../auth/auth";
 import LoadIcon from "../components/pages/app/components/loadIcon";
+import { userData } from "../database/data";
 
 class App extends Component {
-  state = { loggedIn: "loading" };
+  state = { loggedIn: "loading" , theme: "theme-dark"};
   componentDidMount() {
     authUser.onAuthStateChanged(this.checkIfLoggedIn);
   }
   checkIfLoggedIn = user => {
     this.setState({ loggedIn: Boolean(user) });
+    userData.getUserTheme().then(themeOutput => this.setState({theme: themeOutput}))
   };
   loggedInRoutes() {
     if (this.state.loggedIn === "loading") {
@@ -48,8 +50,9 @@ class App extends Component {
     }
   }
   render() {
+    console.log(this.state.theme)
     return (
-      <div className="break-words flex flex-col h-full">
+      <div className= {`break-words flex flex-col h-full ${this.state.theme}`}>
         <Router>
           <Nav loggedIn={this.state.loggedIn} />
           <Route exact path="/" component={FrontPage} />

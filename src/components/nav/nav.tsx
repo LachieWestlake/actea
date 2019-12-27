@@ -27,7 +27,7 @@ class Nav extends React.Component<NavProps, NavState> {
 
   render() {
     return (
-      <nav onClick = {this.closeNav} className="flex items-center top-0 z-50 justify-between flex-wrap bg-teal-400 shadow-lg sticky px-6 py-3">
+      <nav onClick = {this.closeNav} className="flex items-center top-0 z-50 justify-between flex-wrap bg-primary shadow-lg sticky px-6 py-3">
         <div className="flex items-center flex-no-shrink text-white mr-6">
           <svg
             className="fill-current h-8 w-8 mr-2"

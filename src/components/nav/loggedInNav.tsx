@@ -14,8 +14,11 @@ class LoggedInNav extends React.Component<LoggedInNavProps, LoggedInNavState> {
     return (
       <React.Fragment>
         <div className="text-sm lg:flex-grow">
-          <Link
-            to="/home"
+          
+        </div>
+        <div>
+        <Link
+            to="/app"
             className="block mt-4 lg:inline-block lg:mt-0 text-teal-100 hover:text-white mr-4"
           >
             Home
@@ -38,8 +41,6 @@ class LoggedInNav extends React.Component<LoggedInNavProps, LoggedInNavState> {
           >
             Messages
           </a>
-        </div>
-        <div>
           <a
             href="#"
             onClick={this.logout}
