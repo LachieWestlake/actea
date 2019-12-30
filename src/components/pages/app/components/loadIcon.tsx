@@ -12,7 +12,7 @@ class LoadIcon extends React.Component<LoadIconProps, LoadIconState> {
     state = {  }
     render() { 
         // return ( <i className={`fas fa-circle-notch fa-spin text-center text-4xl block ${this.props.className}`} /> );
-        return ( <img src={process.env.PUBLIC_URL + '/img/loader/1.gif'} className={`m-auto w-20 ${this.props.className}`} /> );
+        return ( <img src={process.env.PUBLIC_URL + '/img/loader/3.svg'} className={`m-auto w-20 ${this.props.className}`} /> );
     }
 }
  

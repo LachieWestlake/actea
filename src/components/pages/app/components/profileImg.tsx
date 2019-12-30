@@ -21,7 +21,7 @@ class ProfileImg extends React.Component<ProfileImgProps, ProfileImgState> {
   render() {
     let img = this.processPhoto(this.props.img);
     return (
-      <div className="flex items-center">
+      <div className="flex items-center flex-shrink-0">
         {img !== "load" || !img ? (
           <img
             className={this.props.picClasses || "w-10 h-10 rounded-full mr-4"}
