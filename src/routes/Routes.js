@@ -50,7 +50,6 @@ class App extends Component {
     }
   }
   render() {
-    console.log(this.state.theme)
     return (
       <div className= {`break-words flex flex-col h-full ${this.state.theme}`}>
         <Router>

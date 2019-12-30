@@ -38,6 +38,14 @@ class UserData {
     }
     return theme
   }
+
+  setUserTheme(theme: String) {
+    let email = authUser.getEmail()
+    data.getDatabase()
+      .collection("users")
+      .doc(email)
+      .set({theme: theme});
+  }
 }
 
 export default UserData;

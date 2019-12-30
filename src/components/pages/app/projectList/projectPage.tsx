@@ -2,7 +2,7 @@ import * as React from "react";
 import { Component } from "react";
 import ProjectList from "./projectList";
 import CreateNewProject from "./createNewProject";
-import SearchProjects from './searchProjects'
+import SearchProjects from './searchProjects';
 
 export interface ProjectPageProps {}
 
@@ -14,7 +14,7 @@ class ProjectPage extends React.Component<ProjectPageProps, ProjectPageState> {
       <div className="container mx-auto mt-6 px-3 ">
         <SearchProjects/>
         <CreateNewProject/>
-        <ProjectList />
+        <ProjectList/>
       </div>
     );
   }

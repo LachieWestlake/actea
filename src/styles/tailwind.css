@@ -11,7 +11,7 @@
 }
 
 .theme-dark {
-  --color-primary: #EC635E;
+  --color-primary: rgb(49, 26, 180);
   --color-secondary: #EDEDED;
   --color-tertiary: #FEFEFE;
   --color-quartery: #000000;
