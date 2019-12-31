@@ -1,28 +1,31 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import authUser from "../../auth/auth";
-import {userData} from '../../database/data';
+import { userData } from '../../database/data';
 
-export interface LoggedInNavProps {}
+export interface LoggedInNavProps { }
 
-export interface LoggedInNavState {}
+export interface LoggedInNavState { }
 
 class LoggedInNav extends React.Component<LoggedInNavProps, LoggedInNavState> {
-  state = {theme: false};
+  state = { darkModeOn: false };
   logout = () => {
     authUser.signOut();
   }
 
-  componentDidMount(){
-    userData.getUserTheme().then(themeOutput => console.log)
-    userData.getUserTheme().then(themeOutput => {if(themeOutput == 'theme-dark'){this.setState({theme: true})} })
+  componentDidMount() {
+    userData.getUserTheme().then(themeOutput => {
+      console.log(themeOutput)
+      this.setState({ darkModeOn: themeOutput === 'theme-dark' })
+    })
   }
-  handleThemeChange=(e)=>{
-    this.setState({theme: e.target.checked})
-    if(e.target.checked){
+
+  handleThemeChange = (e) => {
+    this.setState({ darkModeOn: e.target.checked })
+    if (e.target.checked) {
       userData.setUserTheme('theme-dark')
     }
-    else{
+    else {
       userData.setUserTheme('theme-light')
     }
   }
@@ -31,16 +34,16 @@ class LoggedInNav extends React.Component<LoggedInNavProps, LoggedInNavState> {
 
   render() {
 
-  
+
+    console.log(this.state.darkModeOn)
     return (
       <React.Fragment>
         <div className="text-sm lg:flex-grow">
-          
         </div>
         <div>
-        <div className="block mt-4 lg:inline-block lg:mt-0 text-black mr-2">dark mode</div>
-        <input type="checkbox" className={'mr-4'} onChange={this.handleThemeChange} defaultChecked={this.state.theme}/>
-        <Link
+          <div className="block mt-4 lg:inline-block lg:mt-0 text-black mr-2">dark mode</div>
+          <input type="checkbox" className={'mr-4'} onChange={this.handleThemeChange} defaultChecked={this.state.darkModeOn} />
+          <Link
             to="/app"
             className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-white mr-4"
           >
