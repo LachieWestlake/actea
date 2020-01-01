@@ -12,7 +12,7 @@ class Messages extends React.Component<MessagesProps, MessagesState> {
   componentDidMount() {}
   render() {
     return (
-      <div className="flex flex-col items-start flex-grow flex flex-col flex-col-reverse overflow-scroll">
+      <div className="flex  flex-col items-start flex-grow flex flex-col flex-col-reverse overflow-auto">
         {this.props.messages.map((message,i) => {
           let date:string = message.date.toDate()
           return <div className="mb-3" key={date}>
