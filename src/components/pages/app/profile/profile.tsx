@@ -9,6 +9,7 @@ import SkillsDisplay from "../skills/skillsDisplay";
 import {withRouter} from 'react-router-dom'
 import {RouteComponentProps} from 'react-router'
 import {UserProperties} from "./editProfile";
+import {debug} from "util";
 
 type ProfileProps = RouteComponentProps<ProfileProps> & {
     match: any
@@ -32,11 +33,12 @@ class Profile extends React.Component<ProfileProps> {
     }
 
     message = async () => {
-        let myEmail: string = authUser.getEmail() || "";
-        let receiverEmail: string = this.state.userData?.email || "";
-        let newChat = await messageData.createNewChannel([myEmail, receiverEmail]);
-
-        window.location.replace(`/app/messenger/channel/${newChat}`);
+        let myEmail: string | undefined = authUser.getEmail();
+        let receiverEmail: string | undefined = this.state.userData?.email;
+        if (myEmail && receiverEmail) {
+            let newChat = await messageData.createNewChannel([myEmail, receiverEmail]);
+            this.props.history.push(`/app/messenger/channel/${newChat}`);
+        }
     };
 
     setUserDetail = (userDataObj: UserProperties) => {
