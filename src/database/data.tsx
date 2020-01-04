@@ -9,6 +9,7 @@ import authUser from "../auth/auth";
 import MessageData from "./messageData";
 import ProjectData from "./projectData";
 import UserData from "./userData";
+import SkillsData from './skillsData'
 
 
 class Data {
@@ -33,7 +34,8 @@ class Data {
 }
 let data: Data = new Data();
 let messageData: MessageData = new MessageData();
+let skillsData: SkillsData = new SkillsData();
 let projectData: ProjectData = new ProjectData();
 let userData: UserData = new UserData();
 
-export {data, messageData, projectData, userData};
+export {data, messageData, projectData, userData, skillsData};

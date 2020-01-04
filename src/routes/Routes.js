@@ -24,7 +24,7 @@ class App extends Component {
   };
   loggedInRoutes() {
     if (this.state.loggedIn === "loading") {
-      return <LoadIcon className="py-3"/>;
+      return <LoadIcon className="py-3" />;
     } else if (this.state.loggedIn) {
       return (
         <React.Fragment>
@@ -49,7 +49,7 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="break-words flex flex-col h-full">
+      <div className="break-words flex flex-col" style={{ height: "100vh" }}>
         <Router>
           <Nav loggedIn={this.state.loggedIn} />
           <Route exact path="/" component={FrontPage} />

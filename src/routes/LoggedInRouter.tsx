@@ -6,6 +6,7 @@ import Project from "../components/pages/app/projectList/project/project";
 import Profile from "../components/pages/app/profile/profile";
 import EditProfile from "../components/pages/app/profile/editProfile";
 import Messenger from "../components/pages/app/messenger/messenger";
+import SkillsEdit from "../components/pages/app/skills/skillsEdit";
 class LoggedInRouter extends Component {
   render() {
     return (
@@ -15,6 +16,7 @@ class LoggedInRouter extends Component {
         <Route exact path="/app/projects/project/:id" component={Project} />
         <Route exact path="/app/profile/email/:email" component={Profile} />
         <Route exact path="/app/profile/editMyProfile" component={EditProfile} />
+        <Route exact path="/app/profile/editMySkills" component={SkillsEdit} />
         <Route exact path="/app/messenger" component={Messenger} />
         <Route exact path="/app/messenger/channel/:channelId" component={Messenger} />
       </Router>

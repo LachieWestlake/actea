@@ -50,7 +50,7 @@ class MessengerContactCurrent extends React.Component<
         {this.props.backButton ? (
           <div className="flex items-center"
             onClick={() => {
-              this.props.history.goBack();
+              this.props.history.push("/app/messenger");
             }}>
             <i className="fas fa-chevron-left mr-5 ml-2" />
           </div>

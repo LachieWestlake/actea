@@ -29,7 +29,7 @@ class ProfileImg extends React.Component<ProfileImgProps, ProfileImgState> {
             alt="User"
           />
         ) : (
-          <LoadIcon className="mr-3" />
+          <LoadIcon className=" w-8 h-8" />
         )}
       </div>
     );
