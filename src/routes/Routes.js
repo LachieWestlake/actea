@@ -14,17 +14,18 @@ import LoggedInRouter from "./LoggedInRouter";
 import authUser from "../auth/auth";
 import LoadIcon from "../components/pages/app/components/loadIcon";
 import { userData } from "../database/data";
+import store from 'store'
 
 class App extends Component {
-  state = { loggedIn: "loading" , theme: "theme-dark"};
+  state = { loggedIn: "loading"};
   componentDidMount() {
     authUser.onAuthStateChanged(this.checkIfLoggedIn);
   }
   checkIfLoggedIn = user => {
     this.setState({ loggedIn: Boolean(user) });
-    userData.getUserTheme().then(themeOutput => this.setState({theme: themeOutput}))
   };
   loggedInRoutes() {
+
     if (this.state.loggedIn === "loading") {
       return <LoadIcon className="py-3"/>;
     } else if (this.state.loggedIn) {
@@ -51,7 +52,7 @@ class App extends Component {
   }
   render() {
     return (
-      <div className= {`break-words flex flex-col h-full ${this.state.theme}`}>
+      <div className= {`break-words flex flex-col h-full ${store.get('theme')}`}>
         <Router>
           <Nav loggedIn={this.state.loggedIn} />
           <Route exact path="/" component={FrontPage} />
