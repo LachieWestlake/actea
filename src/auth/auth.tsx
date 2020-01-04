@@ -21,7 +21,7 @@ class Auth {
   }
   getEmail() {
     let currentUser = firebase.auth().currentUser;
-    return currentUser ? currentUser.email : "";
+    return currentUser?.email||undefined;
   }
 }
 
