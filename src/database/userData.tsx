@@ -12,7 +12,6 @@ export type UserProperties = {
     university: string
 }
 
-
 class UserData {
     async getUserFromEmail(email: string) {
         const userData = await data

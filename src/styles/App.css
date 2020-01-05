@@ -1,3 +1,22 @@
+/* :root {
+  --color-primary: #5c6ac4;
+  --color-secondary: #ecc94b;
+} */
+
+.theme-light {
+  --color-primary: #EC635E;
+  --color-secondary: #EDEDED;
+  --color-tertiary: #FEFEFE;
+  --color-quartery: #000000;
+}
+
+.theme-dark {
+  --color-primary: rgb(49, 26, 180);;
+  --color-secondary: #EDEDED;
+  --color-tertiary: #FEFEFE;
+  --color-quartery: #000000;
+}
+
 @tailwind base;
 
 @tailwind components;
