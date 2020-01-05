@@ -13,9 +13,11 @@ import LoginPage from "../components/pages/login/loginPage";
 import LoggedInRouter from "./LoggedInRouter";
 import authUser from "../auth/auth";
 import LoadIcon from "../components/pages/app/components/loadIcon";
+import { userData } from "../database/data";
+import store from 'store'
 
 class App extends Component {
-  state = { loggedIn: "loading" };
+  state = { loggedIn: "loading"};
   componentDidMount() {
     authUser.onAuthStateChanged(this.checkIfLoggedIn);
   }
@@ -23,6 +25,7 @@ class App extends Component {
     this.setState({ loggedIn: Boolean(user) });
   };
   loggedInRoutes() {
+
     if (this.state.loggedIn === "loading") {
       return <LoadIcon className="py-3" />;
     } else if (this.state.loggedIn) {
@@ -49,7 +52,8 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="break-words flex flex-col" style={{ height: "100vh" }}>
+      <div className= {`break-words flex flex-col h-full ${store.get('theme')}`}>
+
         <Router>
           <Nav loggedIn={this.state.loggedIn} />
           <Route exact path="/" component={FrontPage} />

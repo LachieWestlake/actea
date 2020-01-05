@@ -1,4 +1,5 @@
 import { data } from "./data";
+
 import SkillsData from "./skillsData";
 
 class UserData {
