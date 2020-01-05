@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Component } from "react";
-import ProjectList from "./projectList";
+import ProjectList, {SearchAlignment} from "./projectList";
 import CreateNewProject from "./createNewProject";
 
 export interface ProjectPageProps {}
@@ -12,7 +11,7 @@ class ProjectPage extends React.Component<ProjectPageProps, ProjectPageState> {
     return (
       <div className="container mx-auto mt-6 px-3 ">
         <CreateNewProject />
-        <ProjectList />
+        <ProjectList searchAlignment={SearchAlignment.Right} />
       </div>
     );
   }
