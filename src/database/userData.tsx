@@ -1,17 +1,19 @@
 import { data } from "./data";
-import authUser from "../auth/auth";
-import { async } from "q";
+
+import SkillsData from "./skillsData";
 
 class UserData {
   async getUserFromEmail(email: string) {
-    const userData = await data.getDatabase()
+    const userData = await data
+      .getDatabase()
       .collection("users")
       .doc(email)
       .get();
     return userData.data();
   }
   async getUserListFromPartialEmail(partialEmail: string) {
-    const userData = await data.getDatabase()
+    const userData = await data
+      .getDatabase()
       .collection("users")
       .orderBy("email")
       .startAt(partialEmail)
@@ -20,7 +22,8 @@ class UserData {
     return userData.docs.map(doc => doc.data());
   }
   setUserData(email: String, newData: Object) {
-    data.getDatabase()
+    data
+      .getDatabase()
       .collection("users")
       .doc(email)
       .set(newData, { merge: true });
@@ -28,16 +31,23 @@ class UserData {
   getUserName(userData) {
     return userData.displayName || userData.email;
   }
-  async getUserTheme() {
-    const email = await authUser.getEmail();
-    let theme :string = 'theme-light';
-
-    if(email){ 
-      let userData = await this.getUserFromEmail(email);
-      theme = userData.theme
-    }
-    return theme
-  }
 }
+
+for(const key of Object.getOwnPropertyNames(UserData.prototype)) {
+  const old = UserData.prototype[key];
+  if(old.constructor.name==="AsyncFunction"){
+    UserData.prototype[key] = async function(...args) {
+      console.log('Fetching Data',key);
+      return await old.call(this, ...args);
+    };
+  } else {
+    UserData.prototype[key] = function(...args) {
+      console.log('Fetching Data',key);
+      return old.call(this, ...args);
+    };
+  }
+
+}
+
 
 export default UserData;

@@ -2,17 +2,22 @@ import * as React from "react";
 import { Component } from "react";
 import { messageData, userData } from "../../../../database/data";
 import authUser from "../../../../auth/auth";
+import { withRouter } from "react-router-dom";
 import ProfileImg from "../components/profileImg";
 import { Link } from "react-router-dom";
-export interface MessengerContactProps {
+import { RouteComponentProps } from "react-router";
+
+type MessengerContactCurrentProps = RouteComponentProps & {
   channelId;
-}
+  backButton: boolean;
+  history: any;
+};
 
-export interface MessengerContactState {}
+export interface MessengerContactCurrentState {}
 
-class MessengerContact extends React.Component<
-  MessengerContactProps,
-  MessengerContactState
+class MessengerContactCurrent extends React.Component<
+  MessengerContactCurrentProps,
+  MessengerContactCurrentState
 > {
   state = { image: "load", name: "", lastMessage: "" };
   componentDidMount() {
@@ -41,20 +46,27 @@ class MessengerContact extends React.Component<
   };
   render() {
     return (
-      <Link to={`/app/messenger/channel/${this.props.channelId}`}>
-        <div className="flex">
-          <ProfileImg
-            picClasses={`h-16 w-16 rounded-full mx-auto flex-no-shrink`}
-            img={this.state.image}
-          />
-          <div className="p-4 overflow-hidden">
-            <div className="font-bold text-xl mb-2">{this.state.name}</div>
-            <p className="text-gray-700 text-base">{this.state.lastMessage}</p>
+      <div className="flex border-b pb-2">
+        {this.props.backButton ? (
+          <div className="flex items-center"
+            onClick={() => {
+              this.props.history.push("/app/messenger");
+            }}>
+            <i className="fas fa-chevron-left mr-5 ml-2" />
           </div>
+        ) : (
+          false
+        )}
+        <ProfileImg
+          picClasses={`h-8 w-8 rounded-full mx-auto flex-no-shrink`}
+          img={this.state.image}
+        />
+        <div className="pl-4 py-2 overflow-hidden">
+          <div className="font-bold text-xl">{this.state.name}</div>
         </div>
-      </Link>
+      </div>
     );
   }
 }
 
-export default MessengerContact;
+export default withRouter(MessengerContactCurrent);
