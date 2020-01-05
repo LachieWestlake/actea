@@ -41,13 +41,13 @@ class CreateNewProject extends React.Component<
         <div className="flex">
           <div className="flex-grow">
             <input
-              className="w-full shadow-md p-4 border-0 rounded-t-lg"
+              className="w-full shadow-md p-4 border rounded-t-lg"
               placeholder="Your Idea"
               onChange={this.handleTitleChange}
               value={this.state.title}
             />
             <textarea
-              className="w-full shadow-md p-4 mb-3 rounded-b-lg"
+              className="w-full shadow-md border border-b-0 p-4 mb-3 rounded-b-lg"
               placeholder="Describe your project in detail"
               rows={4}
               onChange={this.handleContentChange}

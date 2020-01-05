@@ -43,35 +43,35 @@ class LoggedInNav extends React.Component<LoggedInNavProps, LoggedInNavState> {
         <FontAwesomeIcon icon={store.get('theme')==='theme-dark' ? faMoon : faSun} onClick={this.handleThemeChange} className={'mr-4'}/> 
           <Link
             to="/app"
-            className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-white mr-4"
+            className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-red-800 p-2 rounded hover:bg-red-100 mr-4"
           >
             Home
           </Link>
           <Link
             to="/about"
-            className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-white mr-4"
+            className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-red-800 p-2 rounded hover:bg-red-100 mr-4"
           >
             About
           </Link>
-          <a
-            href={`/app/profile/email/${authUser.getEmail()}`}
-            className="block mt-4 lg:inline-block lg:mt-0 mr-4 text-black hover:text-white"
+          <Link
+            to={`/app/profile/email/${authUser.getEmail()}`}
+            className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-red-800 p-2 rounded hover:bg-red-100 mr-4"
           >
             My Profile
-          </a>
-          <a
-            href={`/app/messenger`}
-            className="block mt-4 lg:inline-block lg:mt-0 mr-4 text-black hover:text-white"
+          </Link>
+          <Link
+            to={`/app/messenger`}
+            className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-red-800 p-2 rounded hover:bg-red-100 mr-4"
           >
             Messages
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="#"
             onClick={this.logout}
-            className="inline-block text-sm px-4 py-2 leading-none border rounded text-black border-white hover:border-transparent hover:text-teal hover:bg-white mt-4 lg:mt-0"
+            className="block mt-4 lg:inline-block lg:mt-0 text-black hover:text-red-800 p-2 rounded hover:bg-red-100 mr-4"
           >
             Logout
-          </a>
+          </Link>
         </div>
       </React.Fragment>
     );

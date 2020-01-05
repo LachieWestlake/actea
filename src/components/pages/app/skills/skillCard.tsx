@@ -1,65 +1,134 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {skillsData} from "../../../../database/data";
 import {Link} from "react-router-dom";
 import LoadIcon from "../components/loadIcon";
+import {SkillDescription, SkillPhoto} from "../../../../database/skillsData";
+import ImageUploader from "../components/imageUpload/imageUploader";
+import {debounce} from "../../../../database/utils";
+import {SkillImg} from "./skillImg";
+import {SkillImgExpanded} from "../../../../database/skillImgExpanded";
 
 export interface SkillCardProps {
     skillId: string;
+    editing?: boolean;
+    email: string | undefined
+    expanded?: boolean
 }
 
 type SkillDetails = {
     name?: string;
 };
-type Image = {
-    url?: string
-    user?: string
+
+type LinkWrapperPropTypes = {
+    children: JSX.Element,
+    to: string,
+    hideLink: boolean
 }
+const LinkWrapper = ({children, to, hideLink}: LinkWrapperPropTypes) =>
+    hideLink ? children : <Link to={to}>{children}</Link>
 
-const SkillCard: React.FunctionComponent<SkillCardProps> = ({skillId}) => {
-    const [images, setImages] = useState([]);
-    const [skillDetails, setSkillDetails] = useState<SkillDetails>();
-    const [loadingDetails, setLoadingDetails] = useState(true);
-    useEffect(() => {
-        skillsData
-            .getSkillImages(skillId)
-            .then(skillImages => setImages(skillImages));
-        skillsData.getSkillDetails(skillId).then(skill => {
-            setSkillDetails(skill)
-            setLoadingDetails(false)
-        });
-    }, [skillId]);
+const SkillCard: React.FunctionComponent<SkillCardProps> =
+    ({skillId, email, editing = false, expanded = false}) => {
+        const [images, setImages] = useState<Array<SkillPhoto>>([]);
+        const [skillDetails, setSkillDetails] = useState<SkillDetails>();
+        const [skillDescForUser, setSkillDescForUser] = useState<SkillDescription | undefined>();
+        const [saving, setSaving] = useState<boolean>(false);
+        const [loadingDetails, setLoadingDetails] = useState(true);
+        const [imageUploaderKey, setImageUploaderKey] = useState(0);
 
-    return (
-        <>
-            <Link
-                to={"/app/skills"}
-                className="max-w-2xl cursor-pointer w-full flex flex-col lg:flex-row mx-auto my-5 scale-on-hover shadow-md overflow-auto break-word border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded">
-                {/* {data.image ? (
-          <div
-            className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden bg-center"
-            style={{
-              backgroundImage: `url('${this.props.data.image}')`
-            }}
-          />
-        ) : (
-          false
-        )} */}{loadingDetails ? <LoadIcon className="m-auto block"/> : false}
-                <div className="p-4">
+        useEffect(() => {
+            let imgObs = skillsData
+                .getSkillImages(skillId)
+                .subscribe(setImages);
+            let skillObs = skillsData
+                .getSkillDescription(skillId)
+                .subscribe(setSkillDescForUser);
+            skillsData.getSkillDetails(skillId).then(skill => {
+                setSkillDetails(skill);
+                setLoadingDetails(false)
+            });
+            return () => {
+                imgObs.unsubscribe()
+                skillObs.unsubscribe()
+            }
+        }, [skillId]);
 
-                    <div className="mb-4">
-                        <div className="text-black font-bold text-xl mb-2">{skillDetails?.name}</div>
-                        <p className="text-grey-darker text-base">{}</p>
+
+        const writeDescToDb = debounce((text) => {
+            skillsData.setSkillDescription(skillId, text)
+            setSaving(false)
+        }, 1000)
+
+        const imageUploaded = async (imageLink: string) => {
+            skillsData.addImage(skillId, imageLink)
+            setImageUploaderKey(imageUploaderKey + 1)
+        }
+
+        const deleteImage = (imageId: string) => {
+            skillsData.deleteImage(skillId, imageId)
+        }
+
+        return (
+            <LinkWrapper hideLink={editing || expanded} to={`/app/profile/email/${email}/skill/${skillId}`}>
+                <>
+                    <div
+                        className={`max-w-2xl w-full flex flex-col lg:flex-row mx-auto my-5 ${expanded ? "" : "scale-on-hover"}
+                    shadow-md overflow-auto break-word border-r border-b border-l border-grey-light 
+                    lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded`}>
+                        {loadingDetails ? <LoadIcon className="m-auto block"/> : false}
+                        <div className="p-4 w-full">
+                            <div className="mb-2">
+                                <span className="text-black font-bold text-xl  capitalize">{skillDetails?.name}</span>
+                                {editing ?
+                                    <i className="fas fa-trash-alt ml-3 cursor-pointer" onClick={() => {
+                                        skillsData.deleteAssociation(skillId)
+                                    }}/> : false
+                                }
+                            </div>
+                            {editing ?
+                                <textarea
+                                    rows={4}
+                                    className="w-full appearance-none border-b-2 mb-2 py-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    value={skillDescForUser?.description}
+                                    placeholder={"Write about and link to projects where you have shown this skill"}
+                                    onChange={(e) => {
+                                        let a = skillDescForUser ? setSkillDescForUser({
+                                            ...skillDescForUser,
+                                            description: e.target.value
+                                        }) : false;
+                                        setSaving(true)
+                                        writeDescToDb(e.target.value)
+                                    }
+                                    }/> :
+                                <div className="my-3 whitespace-pre-line">{skillDescForUser?.description}</div>
+                            }
+                            {saving ?
+                                <div className="mb-3 font-bold">Saving...</div> : false
+                            }
+                            {!expanded ?
+                                <div className="flex items-center mt-2 flex-wrap">
+                                    {images.map((image) =>
+                                        <SkillImg key={image.url} deleteImage={deleteImage} image={image}
+                                                  editing={editing}/>
+                                    )}
+                                    {editing ?
+                                        <ImageUploader
+                                            key={imageUploaderKey}
+                                            setImage={imageUploaded}
+                                            className="px-4 py-2 cursor-pointer border mr-3 border-gray-300 rounded-lg flex justify-center items-center hover:bg-red-100 "/>
+                                        : false
+                                    }
+                                </div> : false}
+                        </div>
                     </div>
-                    <div className="flex items-center">
-                        {images.map((image: Image) =>
-                            <img key={image.url} className="w-1/4 border border-gray-300 rounded-lg" src={image.url}>
-                            </img>)}
-                    </div>
-                </div>
-            </Link>
-        </>
-    );
-};
+                    {expanded ?
+                        <div className="max-w-2xl m-auto mt-10 flex justify-center items-center flex-row flex-wrap">
+                                <SkillImgExpanded images={images}/>
+                        </div> : false}
+                </>
+            </LinkWrapper>
+        );
+    };
 
 export default SkillCard;

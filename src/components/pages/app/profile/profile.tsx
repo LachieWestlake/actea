@@ -2,14 +2,12 @@ import * as React from "react";
 import {messageData, userData} from "../../../../database/data";
 import LoadIcon from "../components/loadIcon";
 import Moment from "react-moment";
-import ProjectList from "../projectList/projectList";
-import {Link} from "react-router-dom";
+import ProjectList, {SearchAlignment} from "../projectList/projectList";
+import {Link, withRouter} from "react-router-dom";
 import authUser from "../../../../auth/auth";
 import SkillsDisplay from "../skills/skillsDisplay";
-import {withRouter} from 'react-router-dom'
 import {RouteComponentProps} from 'react-router'
-import {UserProperties} from "./editProfile";
-import {debug} from "util";
+import {UserProperties} from "../../../../database/userData";
 
 type ProfileProps = RouteComponentProps<ProfileProps> & {
     match: any
@@ -41,10 +39,8 @@ class Profile extends React.Component<ProfileProps> {
         }
     };
 
-    setUserDetail = (userDataObj: UserProperties) => {
-        console.log(userDataObj);
+    setUserDetail = (userDataObj: UserProperties) =>
         this.setState({userData: userDataObj, loading: false});
-    };
 
     render() {
         if (this.state.loading) return <LoadIcon/>;
@@ -67,18 +63,20 @@ class Profile extends React.Component<ProfileProps> {
                             <div className="text-gray-600 mb-4">
                                 Created <Moment fromNow>{this.state.userData?.createdAt?.toDate().toString()}</Moment>
                             </div>
-                            <div className="flex mb-4 justify-center">
-                                <div className="w-1/2">
-                                    <i className="fas fa-user-plus"/>
-                                    <br/>
-                                    Connect
-                                </div>
-                                {this.state.userData?.email !== authUser.getEmail() ? (
+                            {this.state.userData?.email !== authUser.getEmail() ? (
+                                <div className="flex mb-4 justify-center">
+                                    <div className="w-1/2">
+                                        <i className="fas fa-user-plus"/>
+                                        <br/>
+                                        Connect
+                                    </div>
+
                                     <div className="w-1/2 cursor-pointer" onClick={this.message}>
                                         <i className="fas fa-comment"/><br/>
                                         Message
-                                    </div>) : false}
-                            </div>
+                                    </div>
+                                </div>
+                            ) : false}
                             <Link to="/app/projects">
                                 <button
                                     className="m-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded-full">
@@ -110,13 +108,13 @@ class Profile extends React.Component<ProfileProps> {
                         </div>
                     </div>
                 </div>
+                <div className="w-full xl:w-5/12 p-4 xl:h-full overflow-auto no-scrollbar">
+                    <div className="text-4xl mb-4 text-center">Projects</div>
+                    <ProjectList searchAlignment={SearchAlignment.Center} user={this.state.userData?.email}/>
+                </div>
                 <div className=" w-full xl:w-4/12 p-4 xl:h-full overflow-auto">
                     <div className="text-4xl mb-4 text-center">Skills</div>
                     <SkillsDisplay email={this.state.userData?.email}/>
-                </div>
-                <div className="w-full xl:w-5/12 p-4 xl:h-full overflow-auto">
-                    <div className="text-4xl mb-4 text-center">Projects</div>
-                    <ProjectList user={this.state.userData?.email}/>
                 </div>
             </div>
         );
