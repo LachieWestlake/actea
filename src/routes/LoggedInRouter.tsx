@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import AppHome from "../components/pages/app/appHome";
 import ProjectPage from "../components/pages/app/projectList/projectPage";
 import Project from "../components/pages/app/projectList/project/project";
@@ -11,7 +11,7 @@ import {SkillView} from "../database/skillView";
 class LoggedInRouter extends Component {
   render() {
     return (
-      <Router>
+      <Switch>
         <Route exact path="/app" component={AppHome} />
         <Route exact path="/app/projects" component={ProjectPage} />
         <Route exact path="/app/projects/project/:id" component={Project} />
@@ -21,7 +21,7 @@ class LoggedInRouter extends Component {
         <Route exact path="/app/profile/editMySkills" component={SkillsEdit} />
         <Route exact path="/app/messenger" component={Messenger} />
         <Route exact path="/app/messenger/channel/:channelId" component={Messenger} />
-      </Router>
+      </Switch>
     );
   }
 }

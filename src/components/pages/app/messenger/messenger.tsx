@@ -11,7 +11,6 @@ export interface MessengerState {}
 
 class Messenger extends React.Component<MessengerProps, MessengerState> {
   state = {};
-
   render() {
     return (
       <div className="flex flex-col flex-grow overflow-hidden">

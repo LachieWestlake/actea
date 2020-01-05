@@ -11,3 +11,6 @@
   display: none;
 }
 
+#root, html, body {
+  height: 100%;
+}

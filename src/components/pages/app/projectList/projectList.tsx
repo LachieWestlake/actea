@@ -59,9 +59,9 @@ class ProjectList extends React.Component<ProjectListProps, ProjectListState> {
                                    className={`border-2 py-2 px-4 ${this.props.searchAlignment} mt-4  block rounded-full`}
                                    name="title" onChange={this.handleOnSearch} placeholder={'Search Here...'}/>
                         </div>
-                        <div className="py-3" key={(new Date()).getTime()}>
-                            {this.state.projects.map((data, index) => (
-                                <ProjectCard key={index} data={data}/>
+                        <div className="py-3">
+                            {this.state.projects.map((data) => (
+                                <ProjectCard key={data["id"]} data={data}/>
                             ))}
                             <button
                                 onClick={this.loadMoreProjects}
