@@ -21,12 +21,12 @@ class ProjectCard extends React.Component<ProjectCardProps, ProjectCardState> {
     let name = userData.getUserName(userDataInput);
     this.setState({ name: name, img: userDataInput.photoURL });
   };
+
   showProject = () => {};
   render() {
     return (
-      <Link
-        to={"/app/projects/project/" + this.props.data.id}
-        className="max-w-2xl cursor-pointer w-full flex flex-col lg:flex-row mx-auto my-5 scale-on-hover shadow-md overflow-auto break-word border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded">
+      <div className="h-48 w-full overflow-y-hidden ">
+      <Link to={"/app/projects/project/" + this.props.data.id} className="max-w-2xl cursor-pointer w-full flex flex-col lg:flex-row mx-auto my-5 scale-on-hover shadow-md overflow-auto break-word border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded">
         {this.props.data.image ? (
           <div
             className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden bg-center"
@@ -47,7 +47,6 @@ class ProjectCard extends React.Component<ProjectCardProps, ProjectCardState> {
             </p>
           </div>
           <div className="flex items-center">
-            <ProfileImg img={this.state.img} />
             <div className="text-sm">
               <p className="text-black leading-none">{this.state.name}</p>
               <Moment fromNow>{this.props.data.time.toDate()}</Moment>
@@ -55,6 +54,7 @@ class ProjectCard extends React.Component<ProjectCardProps, ProjectCardState> {
           </div>
         </div>
       </Link>
+      </div>
     );
   }
 }
