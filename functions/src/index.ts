@@ -12,9 +12,6 @@ const client = algoliasearch(functions.config().agolia.app_id, functions.config(
 
 admin.initializeApp(functions.config().firebase);
 
-type SearchQuery = {
-    query: string
-}
 type SearchResult = {
     content: {},
     result: string,
@@ -24,39 +21,48 @@ type SearchResult = {
 const db = admin.firestore();
 
 exports.storeUserData = functions.auth.user().onCreate((user: any) => {
-  console.log("adding user...");
-  console.log(user.toJSON());
-  const name = user.displayName || user.user_name || null;
-  db.collection("users")
-    .doc(user.email)
-    .set({
-      uid: user.uid,
-      email: user.email,
-      displayName: name,
-      photoURL: user.photoURL,
-      phoneNumber: user.phoneNumber,
-      createdAt: new Date(user.metadata.creationTime)
-    });
-  return true;
+    console.log("adding user...");
+    console.log(user.toJSON());
+    const name = user.displayName || user.user_name || null;
+    db.collection("users")
+        .doc(user.email)
+        .set({
+            uid: user.uid,
+            email: user.email,
+            displayName: name,
+            photoURL: user.photoURL,
+            phoneNumber: user.phoneNumber,
+            createdAt: new Date(user.metadata.creationTime)
+        });
+    return true;
 });
 
 exports.landingPageForm = functions.https.onRequest(
-  async (req: Request, response: Response) => {
-    const formData: string = req.query.formData;
-    await db
-        .collection("landingPageForm")
-        .add(JSON.parse(formData));
-    response.set("Access-Control-Allow-Origin", "*");
-    response.status(200).send("Data Added!");
-  }
+    async (req: Request, response: Response) => {
+        const formData: string = req.query.formData;
+        await db
+            .collection("landingPageForm")
+            .add(JSON.parse(formData));
+        response.set("Access-Control-Allow-Origin", "*");
+        response.status(200).send("Data Added!");
+    }
 );
 
-
-const algoliaSkillsIndex = functions.config().agolia.index_skills;
-
 exports.indexentry = functions.firestore.document('/skills/{id}').onWrite(
-    async (data:Change<DocumentSnapshot>, context:EventContext) => {
-        const index = client.initIndex(algoliaSkillsIndex);
+    async (data: Change<DocumentSnapshot>, context: EventContext) => {
+        const index = client.initIndex("skills");
+        const firebaseObject = {
+            text: data.after.data(),
+            objectID: context.params.id
+        };
+
+        await index.saveObject(firebaseObject);
+        return true
+    });
+
+exports.indexentryProject = functions.firestore.document('/projects/{id}').onWrite(
+    async (data: Change<DocumentSnapshot>, context: EventContext) => {
+        const index = client.initIndex("projects");
         const firebaseObject = {
             text: data.after.data(),
             objectID: context.params.id
@@ -68,33 +74,37 @@ exports.indexentry = functions.firestore.document('/skills/{id}').onWrite(
 
 exports.searchRequest = functions.https.onRequest(
     async (req: Request, response: Response) => {
-        const searchQuery: SearchQuery = JSON.parse(req.query.searchQuery);
-        const index = client.initIndex(algoliaSkillsIndex);
+        if (req.query.searchQuery && req.query.indexName) {
+            const searchQuery = req.query.searchQuery;
+            const index = client.initIndex(req.query.indexName);
+            let content: SearchResult
 
-        const query = searchQuery.query;
-        let content:SearchResult
-        if(query){
-            content = {
-                content: await index.search(query),
-                result: "SUCCESS",
-                time: new Date()
+            if (searchQuery) {
+                content = {
+                    content: await index.search(searchQuery),
+                    result: "SUCCESS",
+                    time: new Date()
+                }
+            } else {
+                content = {
+                    content: {},
+                    result: "FAIL",
+                    time: new Date()
+                }
             }
+
+            response.set("Access-Control-Allow-Origin", "*");
+            response.status(200).send(content);
         } else {
-            content = {
-                content:{},
-                result: "FAIL",
-                time: new Date()
-            }
+            response.status(500).send("Please specify query and index using ?searchQuery=...&indexName=...");
         }
 
-        response.set("Access-Control-Allow-Origin", "*");
-        response.status(200).send(content);
     }
 )
 
-exports.sendCollectionToAlgolia = functions.https.onRequest(async (req: Request, res:Response) => {
-    if(req.query.collection && req.query.algoliaIndex){
-        const algoliaRecords : any[] = [];
+exports.sendCollectionToAlgolia = functions.https.onRequest(async (req: Request, res: Response) => {
+    if (req.query.collection && req.query.algoliaIndex) {
+        const algoliaRecords: any[] = [];
 
         // Retrieve all documents from the COLLECTION collection.
         const querySnapshot = await db.collection(req.query.collection).get();

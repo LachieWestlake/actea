@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import {SearchQuery, SearchResult, Skill} from "../../../../../database/skillsData";
+import { SkillSearchResult, Skill} from "../../../../../database/skillsData";
 import {skillsData} from "../../../../../database/data";
 import LoadIcon from "../../components/loadIcon";
 import SkillAndUsersCard from "./skillAndUsersCard";
@@ -9,7 +9,7 @@ import {debounce} from "../../../../../database/utils";
 type SkillListProps = {};
 export const SkillList: React.FunctionComponent<SkillListProps> = ({}) => {
     const [limit, setLimit] = useState<number>(10)
-    const [searchResult, setSearchResult] = useState<SearchResult>()
+    const [searchResult, setSearchResult] = useState<SkillSearchResult>()
     const [loading, setLoading] = useState(true)
     const [noMore, setNoMore] = useState(false)
     const [searchTerm, setSearchTerm] = useState("")
@@ -21,7 +21,7 @@ export const SkillList: React.FunctionComponent<SkillListProps> = ({}) => {
     }, [searchTerm])
 
     const getData = async (limit: number = 10) => {
-        skillsData.getSkills(limit, {query: searchTerm}).then(result => {
+        skillsData.getSkills(limit, searchTerm).then(result => {
             if (limit !== result.matches.length) {
                 setNoMore(true)
             } else {

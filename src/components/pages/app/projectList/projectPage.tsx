@@ -13,7 +13,6 @@ class ProjectPage extends React.Component<ProjectPageProps, ProjectPageState> {
     render() {
         return (
             <div className="container mx-auto mt-6 px-3">
-                <SearchProjects/>
                 <CreateNewProject/>
                 <ProjectList searchAlignment={SearchAlignment.Right}/>
             </div>

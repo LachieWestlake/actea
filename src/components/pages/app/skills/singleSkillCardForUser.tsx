@@ -39,10 +39,10 @@ const SingleSkillCardForUser: React.FunctionComponent<SkillCardProps> =
 
         useEffect(() => {
             let imgObs = skillsData
-                .getSkillImages(skill.id)
+                .getSkillImages(skill.id, email)
                 .subscribe(setImages);
             let skillObs = skillsData
-                .getSkillDescription(skill.id)
+                .getSkillDescription(skill.id, email)
                 .subscribe(setSkillDescForUser);
             skillsData.getSkillDetails(skill.id).then(skill => {
                 setSkillDetails(skill);

@@ -17,7 +17,6 @@ export const SkillView: React.FunctionComponent<SkillViewProps> = ({match, histo
         if (match.params.skillId) {
             skillsData.getSkillDetails(match.params.skillId).then((skill)=>{
                 setSkill(skill)
-                console.log(skill)
                 setLoading(false)
             })
         }

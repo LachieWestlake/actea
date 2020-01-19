@@ -18,7 +18,7 @@ const SkillAndUsersCard: React.FunctionComponent<SkillCardProps> = ({skill}) => 
     return <div className={`max-w-2xl flex flex-col lg:flex-row my-5 mx-3 md:mx-auto scale-on-hover
                 shadow-md overflow-auto break-word border-r border-b border-l border-grey-light 
                 lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded`}>
-        <Link to={`/app/profile/skill/${skill.id}`} className={"w-full"}>
+        <Link to={`/app/skill/${skill.id}`} className={"w-full"}>
             <div className="p-4 w-full">
                 <div className="mb-2">
                     <span className="text-black font-bold text-xl capitalize">{skill.name}</span>
@@ -33,7 +33,7 @@ const SkillAndUsersCard: React.FunctionComponent<SkillCardProps> = ({skill}) => 
                         .map(email =>
                             <UserProfileOnSkillCard key={email}
                                                     userEmail={email}/>)}
-                    {filteredUsers.length > 10 ? <i className="fas fa-angle-double-right ml-3"/> : false}
+                    {filteredUsers.length > 10 ? <i className="fas fa-angle-double-right"/> : false}
                 </div>
             </div>
         </Link>

@@ -16,7 +16,7 @@ export const UserProfileOnSkillCard: React.FunctionComponent<UserProfileOnSkillC
     if(loading) return <LoadIcon className="ml-0 w-10"/>
     return (
         <img
-            className="w-8 rounded-full"
+            className="w-8 rounded-full mr-3"
             src={imgLink}
         />
     );

@@ -10,6 +10,8 @@ import authUser from "../auth/auth";
 import LoadIcon from "../components/pages/app/components/loadIcon";
 import store from 'store'
 
+export const FullHeightContext = React.createContext()
+
 class App extends Component {
   state = { loggedIn: "loading", fullHeight: false};
   componentDidMount() {
@@ -46,15 +48,19 @@ class App extends Component {
   }
   render() {
     return (
-      <div className= {`break-words flex flex-col h-full ${store.get('theme')} ${this.state.fullHeight?"h-screen":""}`}>
-        <Router>
-          <Nav loggedIn={this.state.loggedIn} />
-          <Route exact path="/" component={FrontPage} />
-          <Route path="/home" component={Home} />
-          <Route path="/about" component={About} />
-          {this.loggedInRoutes()}
-        </Router>
-      </div>
+        <FullHeightContext.Provider value={(fullHeight)=>this.setState({fullHeight})}>
+          <div
+              className={`break-words flex flex-col h-full ${store.get('theme')} ${this.state.fullHeight ? "h-screen" : ""}`}>
+            <Router>
+              <Nav loggedIn={this.state.loggedIn}/>
+              <Route exact path="/" component={FrontPage}/>
+              <Route path="/home" component={Home}/>
+              <Route path="/about" component={About}/>
+              {this.loggedInRoutes()}
+            </Router>
+          </div>
+        </FullHeightContext.Provider>
+
     );
   }
 }

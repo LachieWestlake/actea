@@ -1,5 +1,6 @@
 import * as firebase from "firebase/app";
 import "firebase/auth";
+import {userData} from "../database/data";
 
 class Auth {
   getAuth() {
@@ -14,7 +15,7 @@ class Auth {
   getName() {
     let currentUser = firebase.auth().currentUser;
     if (currentUser) {
-      return currentUser.displayName;
+      return userData.getUserName(currentUser);
     } else {
         return false;
     }

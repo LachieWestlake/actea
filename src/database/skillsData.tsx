@@ -1,42 +1,17 @@
-import {data, skillsData} from "./data";
+import {data} from "./data";
 import authUser from "../auth/auth";
 import {Observable} from 'rxjs'
 import firebase from 'firebase'
+import {AgoliaSearchResult} from "./searchTypes";
 
 type QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
 
-export type SearchQuery = {
-    query: string
-}
-export type SearchResult = {
+export type SkillSearchResult = {
     matches: {
         skill: Skill,
-        highlightedText?: string
-        matchLevel: string
+        // highlightedText?: string
+        // matchLevel: string
     }[]
-}
-
-
-type AgoliaSearchResult = {
-    content: {
-        hits: {
-            text: {
-                name: string,
-                usersWithSkill: {
-                    [user: string]: boolean
-                }
-            },
-            objectID: string,
-            _highlightResult: {
-                text: {
-                    name: {
-                        value: string,
-                        matchLevel: string,
-                    }
-                }
-            }
-        }[],
-    }
 }
 
 export type Skill = {
@@ -101,19 +76,18 @@ export default class SkillsData {
             }
         })
 
-    async getSkills(limit: number, query: SearchQuery): Promise<SearchResult> {
-        if (query.query) {
+    async getSkills(limit: number, query: string): Promise<SkillSearchResult> {
+        if (query) {
             let queryResult: AgoliaSearchResult = await (await fetch(
-                    `https://us-central1-socialmedia-9fc35.cloudfunctions.net/searchRequest?searchQuery=${
-                        JSON.stringify(query)
-                    }`)
+                    `https://us-central1-socialmedia-9fc35.cloudfunctions.net/searchRequest?searchQuery=
+                    ${query}&indexName=skills`)
             ).json()
             console.log(queryResult)
             return {
                 matches: queryResult.content.hits.map(skill => ({
-                    skill: {id: skill.objectID, ...skill.text},
-                    highlightedText: skill._highlightResult.text.name.value,
-                    matchLevel: skill._highlightResult.text.name.matchLevel
+                    skill: {id: skill.objectID, ...skill.text}
+                    // highlightedText: skill._highlightResult.text.name.value,
+                    // matchLevel: skill._highlightResult.text.name.matchLevel
                 }))
             }
         } else {
