@@ -39,7 +39,7 @@ class MessageData {
             .onSnapshot(querySnapshot => {
                 let messages: Array<any> = [];
                 querySnapshot.forEach(function (doc) {
-                    messages.push(doc.data());
+                    messages.push({id: doc.id, ...doc.data()});
                     callback(messages);
                 });
             });

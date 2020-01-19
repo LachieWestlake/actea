@@ -3,7 +3,7 @@ import {userData} from "../../../../database/data";
 import authUser from "../../../../auth/auth";
 import LoadIcon from "../components/loadIcon";
 import {Link} from "react-router-dom";
-import {Timestamp} from 'firebase/storage';
+import {UserProperties} from "../../../../database/userData";
 
 export interface EditProfileProps {
 }
@@ -12,18 +12,6 @@ export interface EditProfileState {
     userData?: UserProperties
     loading: boolean
 }
-
-export type UserProperties = {
-    displayName: string,
-    photoURL: string,
-    email: string,
-    tagline: string,
-    description: string,
-    phoneNumber: string,
-    createdAt?: Timestamp,
-    university: string
-}
-
 
 class EditProfile extends React.Component<EditProfileProps, EditProfileState> {
 
@@ -41,8 +29,8 @@ class EditProfile extends React.Component<EditProfileProps, EditProfileState> {
         if (email && this.state.userData) userData.setUserData(email!, this.state.userData);
     }
 
-    setUserDetail = (userDataObj: UserProperties) => {
-        this.setState({userData: userDataObj, loading: false});
+    setUserDetail = (userDataObj?: UserProperties) => {
+        if(userDataObj) this.setState({userData: userDataObj, loading: false});
     };
 
     handleChange = ({target}) => {

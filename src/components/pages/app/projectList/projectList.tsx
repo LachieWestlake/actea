@@ -2,6 +2,9 @@ import * as React from "react";
 import ProjectCard from "./projectCard";
 import {projectData} from "../../../../database/data";
 import LoadIcon from "../components/loadIcon";
+import Project from "./project/project";
+import {notEmpty} from "../../../../database/searchTypes";
+import {debounce} from "../../../../database/utils";
 
 
 
