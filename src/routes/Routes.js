@@ -1,10 +1,5 @@
-import React, { Component } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Redirect
-} from "react-router-dom";
+import React, {Component} from "react";
+import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
 import Nav from "../components/nav/nav";
 import FrontPage from "../components/pages/frontPage/frontPage";
 import Home from "../components/pages/home";
@@ -13,11 +8,10 @@ import LoginPage from "../components/pages/login/loginPage";
 import LoggedInRouter from "./LoggedInRouter";
 import authUser from "../auth/auth";
 import LoadIcon from "../components/pages/app/components/loadIcon";
-import { userData } from "../database/data";
 import store from 'store'
 
 class App extends Component {
-  state = { loggedIn: "loading"};
+  state = { loggedIn: "loading", fullHeight: false};
   componentDidMount() {
     authUser.onAuthStateChanged(this.checkIfLoggedIn);
   }
@@ -52,8 +46,7 @@ class App extends Component {
   }
   render() {
     return (
-      <div className= {`break-words flex flex-col h-full ${store.get('theme')}`}>
-
+      <div className= {`break-words flex flex-col h-full ${store.get('theme')} ${this.state.fullHeight?"h-screen":""}`}>
         <Router>
           <Nav loggedIn={this.state.loggedIn} />
           <Route exact path="/" component={FrontPage} />

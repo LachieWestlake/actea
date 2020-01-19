@@ -1,5 +1,6 @@
 import {data} from "./data";
-import {Timestamp} from 'firebase/storage';
+import firebase from "firebase";
+type Timestamp = firebase.firestore.Timestamp;
 
 export type UserProperties = {
     displayName: string,
@@ -13,7 +14,7 @@ export type UserProperties = {
 }
 
 class UserData {
-    async getUserFromEmail(email: string) {
+    async getUserFromEmail(email: string) : Promise<UserProperties|undefined> {
         const userData = await data
             .getDatabase()
             .collection("users")
@@ -39,6 +40,11 @@ class UserData {
             .collection("users")
             .doc(email)
             .set(newData, {merge: true});
+    }
+
+    async getTopUsers(limit: number) {
+        let users = await data.getDatabase().collection("users").limit(limit).get()
+        return users.docs.map((user) => ({id: user.id, ...user.data()}))
     }
 
     getUserName(userData) {
