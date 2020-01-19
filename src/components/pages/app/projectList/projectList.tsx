@@ -7,7 +7,11 @@ import {notEmpty} from "../../../../database/searchTypes";
 import {debounce} from "../../../../database/utils";
 
 
-
+export enum SearchAlignment {
+  Left = "mr-auto",
+  Right = "ml-auto",
+  Center = "mx-auto"
+}
 
 const ProjectList = (props) => {
     return (

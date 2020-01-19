@@ -11,6 +11,7 @@ import {UserProperties} from "../../../../database/userData";
 import {SkillCardProps} from "../skills/skillList/skillAndUsersCard";
 import {useEffect, useState} from "react";
 
+
 type ProfileProps = RouteComponentProps<ProfileProps> & {
     match: any
     history: any
