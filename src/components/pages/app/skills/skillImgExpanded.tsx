@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useState} from "react";
-import {SkillPhoto} from "./skillsData";
+import {SkillPhoto} from "../../../../database/skillsData";
 import Viewer from 'react-viewer'
 
 type SkillImgProps = {

@@ -59,7 +59,7 @@ class Project extends React.Component<ProjectProps & RouteComponentProps<any>,
                                         <ProfileImg img={this.state.user["photoURL"]}/>
                                         <div className="text-sm">
                                             <p className="text-black leading-none">
-                                                {this.state.user["displayName"] || this.state.user["email"]}
+                                                {userData.getUserName(this.state.user)}
                                             </p>
                                             <Moment fromNow>
                                                 {this.state.projectData["time"].toDate()}

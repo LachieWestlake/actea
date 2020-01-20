@@ -1,8 +1,21 @@
 import {data} from "./data";
 import authUser from "../auth/auth";
+import {AgoliaSearchResult} from "./searchTypes";
+import {Skill} from "./skillsData";
+
+type Project = {
+    content: string,
+    time: Date,
+    title: string,
+    user_email: string,
+    id: string
+}
+
+type ProjectSearchResult = {
+    id: string
+}[]
 
 class ProjectData {
-
     getProject(id: string, done: Function) {
         data.getDatabase()
             .collection("projects")
@@ -21,23 +34,25 @@ class ProjectData {
         if (email) {
             query = query.where("user_email", "==", email);
         }
-        return query.onSnapshot(data => {
+        return query.get().then(data => {
             loadDone(this.processFirebaseList(data));
         });
     }
 
-    getPostSearchResults(loadDone: Function, search: String, email: String) {
-        let query = data.getDatabase()
-            .collection("projects")
-            .orderBy("title")
-            .startAt(search)
-            .endAt(search + "\uf8ff")
-        if (email) {
-            query = query.where("user_email", "==", email);
-        }
-        return query.onSnapshot(data => {
-            loadDone(this.processFirebaseList(data));
-        });
+    async getPost(id:string):Promise<Project|undefined>{
+        let post = await data.getDatabase()
+            .collection("projects").doc(id).get()
+        return {id: post.id, ...post.data()}
+    }
+
+    async getPostSearchResults(search: string): Promise<ProjectSearchResult> {
+        let queryResult: AgoliaSearchResult = await (await fetch(
+                `https://us-central1-socialmedia-9fc35.cloudfunctions.net/searchRequest?searchQuery=
+                    ${search}&indexName=projects`)
+        ).json()
+        return queryResult.content.hits.map((project) => ({
+            id: project.objectID
+        }))
     }
 
     processFirebaseList(data: any) {

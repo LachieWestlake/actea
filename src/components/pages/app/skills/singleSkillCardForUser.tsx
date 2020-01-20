@@ -3,16 +3,16 @@ import {useContext, useEffect, useState} from "react";
 import {skillsData} from "../../../../database/data";
 import {Link} from "react-router-dom";
 import LoadIcon from "../components/loadIcon";
-import {SkillDescription, SkillPhoto} from "../../../../database/skillsData";
+import {Skill, SkillDescription, SkillPhoto} from "../../../../database/skillsData";
 import ImageUploader from "../components/imageUpload/imageUploader";
 import {debounce} from "../../../../database/utils";
 import {SkillImg} from "./skillImg";
-import {SkillImgExpanded} from "../../../../database/skillImgExpanded";
+import {SkillImgExpanded} from "./skillImgExpanded";
 
 export interface SkillCardProps {
-    skillId: string;
+    skill: Skill;
+    email: string;
     editing?: boolean;
-    email: string | undefined
     expanded?: boolean
 }
 
@@ -28,8 +28,8 @@ type LinkWrapperPropTypes = {
 const LinkWrapper = ({children, to, hideLink}: LinkWrapperPropTypes) =>
     hideLink ? children : <Link to={to}>{children}</Link>
 
-const SkillCard: React.FunctionComponent<SkillCardProps> =
-    ({skillId, email, editing = false, expanded = false}) => {
+const SingleSkillCardForUser: React.FunctionComponent<SkillCardProps> =
+    ({skill, email, editing = false, expanded = false}) => {
         const [images, setImages] = useState<Array<SkillPhoto>>([]);
         const [skillDetails, setSkillDetails] = useState<SkillDetails>();
         const [skillDescForUser, setSkillDescForUser] = useState<SkillDescription | undefined>();
@@ -39,12 +39,12 @@ const SkillCard: React.FunctionComponent<SkillCardProps> =
 
         useEffect(() => {
             let imgObs = skillsData
-                .getSkillImages(skillId)
+                .getSkillImages(skill.id, email)
                 .subscribe(setImages);
             let skillObs = skillsData
-                .getSkillDescription(skillId)
+                .getSkillDescription(skill.id, email)
                 .subscribe(setSkillDescForUser);
-            skillsData.getSkillDetails(skillId).then(skill => {
+            skillsData.getSkillDetails(skill.id).then(skill => {
                 setSkillDetails(skill);
                 setLoadingDetails(false)
             });
@@ -52,25 +52,25 @@ const SkillCard: React.FunctionComponent<SkillCardProps> =
                 imgObs.unsubscribe()
                 skillObs.unsubscribe()
             }
-        }, [skillId]);
+        }, [skill]);
 
 
         const writeDescToDb = debounce((text) => {
-            skillsData.setSkillDescription(skillId, text)
+            skillsData.setSkillDescription(skill.id, text)
             setSaving(false)
         }, 1000)
 
         const imageUploaded = async (imageLink: string) => {
-            skillsData.addImage(skillId, imageLink)
+            skillsData.addImage(skill.id, imageLink)
             setImageUploaderKey(imageUploaderKey + 1)
         }
 
         const deleteImage = (imageId: string) => {
-            skillsData.deleteImage(skillId, imageId)
+            skillsData.deleteImage(skill.id, imageId)
         }
 
         return (
-            <LinkWrapper hideLink={editing || expanded} to={`/app/profile/email/${email}/skill/${skillId}`}>
+            <LinkWrapper hideLink={editing || expanded} to={`/app/profile/email/${email}/skill/${skill.id}`}>
                 <>
                     <div
                         className={`max-w-2xl w-full flex flex-col lg:flex-row mx-auto my-5 ${expanded ? "" : "scale-on-hover"}
@@ -82,7 +82,7 @@ const SkillCard: React.FunctionComponent<SkillCardProps> =
                                 <span className="text-black font-bold text-xl  capitalize">{skillDetails?.name}</span>
                                 {editing ?
                                     <i className="fas fa-trash-alt ml-3 cursor-pointer" onClick={() => {
-                                        skillsData.deleteAssociation(skillId)
+                                        skillsData.deleteAssociation(skill.id)
                                     }}/> : false
                                 }
                             </div>
@@ -101,7 +101,17 @@ const SkillCard: React.FunctionComponent<SkillCardProps> =
                                         writeDescToDb(e.target.value)
                                     }
                                     }/> :
-                                <div className="my-3 whitespace-pre-line">{skillDescForUser?.description}</div>
+                                <>
+                                    {(skillDescForUser?.description) ?
+                                        <>
+                                            <div
+                                                className={`mt-3 whitespace-pre-line ${!expanded ? "truncate" : ""}`}>{skillDescForUser?.description}</div>
+                                            {!expanded ?
+                                                <div className="mt-1 mb-3 hover:text-blue-500 text-blue-800">
+                                                    Read More...
+                                                </div> : false}
+                                        </> : false}
+                                </>
                             }
                             {saving ?
                                 <div className="mb-3 font-bold">Saving...</div> : false
@@ -124,11 +134,11 @@ const SkillCard: React.FunctionComponent<SkillCardProps> =
                     </div>
                     {expanded ?
                         <div className="max-w-2xl m-auto mt-10 flex justify-center items-center flex-row flex-wrap">
-                                <SkillImgExpanded images={images}/>
+                            <SkillImgExpanded images={images}/>
                         </div> : false}
                 </>
             </LinkWrapper>
         );
     };
 
-export default SkillCard;
+export default SingleSkillCardForUser;

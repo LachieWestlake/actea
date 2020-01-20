@@ -2,6 +2,9 @@ import * as React from "react";
 import ProjectCard from "./projectCard";
 import {projectData} from "../../../../database/data";
 import LoadIcon from "../components/loadIcon";
+import Project from "./project/project";
+import {notEmpty} from "../../../../database/searchTypes";
+import {debounce} from "../../../../database/utils";
 
 export interface ProjectListProps {
     user?: string;
@@ -11,7 +14,10 @@ export interface ProjectListProps {
 export interface ProjectListState {
     projects: Array<Object>;
     hasMore: boolean;
-    loading: boolean
+    loading: boolean;
+    items: number;
+    loadingSearch: boolean;
+    loadingMore: boolean;
 }
 
 export enum SearchAlignment {
@@ -21,64 +27,73 @@ export enum SearchAlignment {
 }
 
 class ProjectList extends React.Component<ProjectListProps, ProjectListState> {
-    state = {projects: [], hasMore: false, loading: true};
-    loadNumber = 0;
+    state = {projects: [], hasMore: true, loading: true, items: 0, loadingSearch: false, loadingMore: false};
 
     componentDidMount() {
         this.loadMoreProjects();
     }
 
     loadMoreProjects = () => {
-        this.loadNumber += 5;
-        projectData.getLatestPosts(this.renderData, this.loadNumber, this.props.user ? this.props.user : "");
+        projectData.getLatestPosts(this.renderData, this.state.items + 5, this.props.user ? this.props.user : "");
+        this.setState({items: this.state.items + 5, loadingMore: true})
     };
-    renderData = (data: Array<Object>) => {
-        this.setState({projects: data, loading: false})
-        ;
+    renderData = (data: Object[]) => {
+        if (data.length !== this.state.items) {
+            this.setState({hasMore: false})
+        }
+        this.setState({projects: data, loading: false, loadingSearch: false, loadingMore: false});
     };
 
-    handleOnSearch = (e) => {
-        if (e.target.value.length > 0) {
-            projectData.getPostSearchResults(this.renderData, e.target.value, this.props.user ? this.props.user : "")
-        } else {
-            projectData.getLatestPosts(this.renderData, this.loadNumber, this.props.user ? this.props.user : "");
-        }
-    }
+    handleOnSearch = debounce((searchString) => {
+        this.setState({items: 5}, () => {
+            if (searchString.length > 0) {
+                projectData.getPostSearchResults(searchString).then((ids) => {
+                    Promise.all(ids.map(async idOfPost => {
+                        return await projectData.getPost(idOfPost.id)
+                    })).then((data) => {
+                        this.renderData(data.filter(notEmpty))
+                    })
+                })
+            } else {
+                this.setState({hasMore: true})
+                projectData.getLatestPosts(this.renderData, this.state.items, this.props.user ? this.props.user : "");
+            }
+        })
+    }, 500)
 
 
     render() {
-        {
-            if (this.state.loading) return <LoadIcon></LoadIcon>
-        }
-        {
-            if (this.state.projects.length !== 0)
-                return (
-                    <div>
-                        <div>
-                            <input type="text"
-                                   className={`border-2 py-2 px-4 ${this.props.searchAlignment} mt-4  block rounded-full`}
-                                   name="title" onChange={this.handleOnSearch} placeholder={'Search Here...'}/>
-                        </div>
-                        <div className="py-3">
-                            {this.state.projects.map((data) => (
-                                <ProjectCard key={data["id"]} data={data}/>
-                            ))}
-                            <button
-                                onClick={this.loadMoreProjects}
-                                className="bg-blue-700 hover:bg-blue-dark text-white font-bold py-2 px-4 m-auto block rounded-full my-3"
-                            >
-                                Load More
-                            </button>
-                        </div>
+        if (this.state.loading) return <LoadIcon/>
+        return (
+            <div>
+                <div>
+                    <input type="text"
+                           className={`border-2 py-2 px-4 ${this.props.searchAlignment} mt-4  block rounded-full`}
+                           name="title"
+                           onChange={(e) => {
+                               this.handleOnSearch(e.target.value)
+                               this.setState({loadingSearch: true})
+                           }}
+                           placeholder={'Search Here...'}/>
+                </div>
+                {this.state.loadingSearch ?
+                    <LoadIcon/> :
+                    <div className="py-3">
+                        {this.state.projects.map((data) => (
+                            <ProjectCard key={data["id"]} data={data}/>
+                        ))}
+                        {this.state.hasMore ? <button
+                            onClick={this.loadMoreProjects}
+                            className="bg-blue-700 hover:bg-blue-dark text-white font-bold py-2 px-4 m-auto block rounded-full my-3"
+                        >
+                            {this.state.loadingMore ? <span>Loading...</span> : <span>Load More</span>}
+                        </button> : false}
                     </div>
+                }
 
-                );
-            else {
-                return <h1>Doesn't look like you have joined a project yet</h1>
-            }
-        }
+            </div>
 
-
+        )
     }
 }
 

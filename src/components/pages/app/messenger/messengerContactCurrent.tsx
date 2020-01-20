@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 import ProfileImg from "../components/profileImg";
 import { Link } from "react-router-dom";
 import { RouteComponentProps } from "react-router";
+import {UserProperties} from "../../../../database/userData";
 
 type MessengerContactCurrentProps = RouteComponentProps & {
   channelId;
@@ -39,10 +40,13 @@ class MessengerContactCurrent extends React.Component<
     userData.getUserFromEmail(peopleArray[0]).then(this.renderUserData);
   };
 
-  renderUserData = userData => {
-    this.setState({
-      image: userData.photoURL
-    });
+  renderUserData = (userData?:UserProperties) => {
+    if(userData){
+      this.setState({
+        image: userData.photoURL
+      });
+    }
+
   };
   render() {
     return (

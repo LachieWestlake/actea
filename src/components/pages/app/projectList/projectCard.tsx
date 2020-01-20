@@ -21,7 +21,6 @@ class ProjectCard extends React.Component<ProjectCardProps, ProjectCardState> {
     let name = userData.getUserName(userDataInput);
     this.setState({ name: name, img: userDataInput.photoURL });
   };
-  showProject = () => {};
   render() {
     return (
       <Link

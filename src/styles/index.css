@@ -10,7 +10,3 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
-
-#root, html, body {
-  height: 100%;
-}

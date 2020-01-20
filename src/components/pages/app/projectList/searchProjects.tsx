@@ -9,7 +9,7 @@ export interface SearchProjectsProps {
   
 }
  
-const SearchProjects: React.SFC<SearchProjectsProps> = () => {
+const SearchProjects: React.FunctionComponent<SearchProjectsProps> = () => {
   return ( 
     <div className="container bg-blue-800 mx-auto flex">
       <div className="w-2/5">hi</div>
