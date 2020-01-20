@@ -14,17 +14,20 @@ export enum SearchAlignment {
 }
 
 const ProjectList = (props) => {
+
     return (
   <div>   
-      <div className="flex flex-wrap -mb-4">
-      {props.projects.map((data, index) => (
+    <h1 className="ml-4 text-4xl text-gray-700">Explore Projects</h1>
+      <div className="flex flex-wrap">
+      {props.projects ? props.projects.map((data, index) => (
           <div className="w-1/3"> <div className="ml-4"><ProjectCard key={index} data={data} /> </div></div>
-      ))}
+      )) : <div/>}
 
       </div>
 </div>
 
     );
+  
 }
 
 export default ProjectList;

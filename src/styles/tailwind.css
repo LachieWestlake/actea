@@ -5,7 +5,7 @@
 
 .theme-light {
   --color-primary: #EC635E;
-  --color-secondary: #EDEDED;
+  --color-secondary: rgb(237, 237, 237);
   --color-tertiary: #FEFEFE;
   --color-quartery: #000000;
 }

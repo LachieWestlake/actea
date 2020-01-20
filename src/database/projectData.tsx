@@ -81,12 +81,12 @@ for (const key of Object.getOwnPropertyNames(ProjectData.prototype)) {
     const old = ProjectData.prototype[key];
     if (old.constructor.name === "AsyncFunction") {
         ProjectData.prototype[key] = async function (...args) {
-            console.log('Fetching Data', key);
+            // console.log('Fetching Data', key);
             return await old.call(this, ...args);
         };
     } else {
         ProjectData.prototype[key] = function (...args) {
-            console.log('Fetching Data', key);
+            // console.log('Fetching Data', key);
             return old.call(this, ...args);
         };
     }
