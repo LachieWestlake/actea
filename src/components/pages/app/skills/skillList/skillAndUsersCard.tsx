@@ -1,11 +1,6 @@
 import * as React from "react";
-import SkillsData, {Skill} from "../../../../../database/skillsData";
-import {UserProperties} from "../../../../../database/userData";
-import LoadIcon from "../../components/loadIcon";
+import {Skill} from "../../../../../database/skillsData";
 import {skillsData} from "../../../../../database/data";
-import {SkillImg} from "../skillImg";
-import ImageUploader from "../../components/imageUpload/imageUploader";
-import {SkillImgExpanded} from "../skillImgExpanded";
 import {Link} from "react-router-dom";
 import {UserProfileOnSkillCard} from "./userProfileOnSkillCard";
 

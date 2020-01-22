@@ -2,11 +2,13 @@ import {data} from "./data";
 import authUser from "../auth/auth";
 import {AgoliaSearchResult} from "./searchTypes";
 import {Skill} from "./skillsData";
+type Timestamp = firebase.firestore.Timestamp;
 
-type Project = {
+export type FirebaseProject = {
     content: string,
-    time: Date,
+    time: Timestamp,
     title: string,
+    image?:string
     user_email: string,
     id: string
 }
@@ -16,14 +18,12 @@ type ProjectSearchResult = {
 }[]
 
 class ProjectData {
-    getProject(id: string, done: Function) {
-        data.getDatabase()
+    async getProject(id: string) {
+        let project = await data.getDatabase()
             .collection("projects")
             .doc(id)
             .get()
-            .then(doc => {
-                done(doc.data());
-            });
+        return {id: project.id, ...project.data()}
     }
 
     getLatestPosts(loadDone: Function, number: Number, email: String) {
@@ -39,7 +39,7 @@ class ProjectData {
         });
     }
 
-    async getPost(id:string):Promise<Project|undefined>{
+    async getPost(id:string):Promise<FirebaseProject|undefined>{
         let post = await data.getDatabase()
             .collection("projects").doc(id).get()
         return {id: post.id, ...post.data()}

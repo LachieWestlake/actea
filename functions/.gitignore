@@ -7,3 +7,5 @@ typings/
 
 node_modules/
 /.runtimeconfig.json
+/src/key.json
+/lib/key.json

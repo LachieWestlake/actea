@@ -46,7 +46,7 @@ class MessengerContact extends React.Component<
           <ProfileImg
             picClasses={`h-16 w-16 rounded-full mx-auto flex-no-shrink`}
             img={this.state.image}
-          />
+        />
           <div className="p-4 overflow-hidden">
             <div className="font-bold text-xl mb-2">{this.state.name}</div>
             <p className="text-gray-700 text-base">{this.state.lastMessage}</p>

@@ -109,7 +109,7 @@ const Profile: React.FunctionComponent<ProfileProps> = ({match, history}) => {
                 <div className="text-4xl mb-4 text-center">Projects</div>
                 <ProjectList searchAlignment={SearchAlignment.Center} user={userDataState!.email}/>
             </div>
-            <div className=" w-full xl:w-4/12 p-4 xl:h-full overflow-auto">
+            <div className=" w-full xl:w-4/12 py-4 pl-4 xl:pr-8 pr-4 xl:h-full overflow-auto">
                 <div className="text-4xl mb-4 text-center">Skills</div>
                 <SkillsDisplay email={userDataState!.email}/>
             </div>

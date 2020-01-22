@@ -38,10 +38,10 @@ class ProjectCard extends React.Component<ProjectCardProps, ProjectCardState> {
         )}
         <div className="p-4">
           <div className="mb-8">
-            <div className="text-black font-bold text-xl mb-2">
+            <div className="text-black font-bold text-xl mb-2 break-all">
               {this.props.data.title}
             </div>
-            <p className="text-grey-darker text-base">
+            <p className="text-grey-darker text-base break-all">
               {this.props.data.content}
             </p>
           </div>

@@ -3,14 +3,17 @@ import {Change, EventContext} from "firebase-functions";
 import * as admin from "firebase-admin";
 import DocumentSnapshot = admin.firestore.DocumentSnapshot;
 
+const fetch = require('node-fetch');
 // The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
 const functions = require("firebase-functions");
 // The Firebase Admin SDK to access the Firebase Realtime Database
 // type DataSnapshot = admin.database.DataSnapshot;
 const algoliasearch = require('algoliasearch');
 const client = algoliasearch(functions.config().agolia.app_id, functions.config().agolia.api_key);
-
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp({
+    credential: admin.credential.cert(require('./key.json')),
+    storageBucket: "socialmedia-9fc35.appspot.com"
+});
 
 type SearchResult = {
     content: {},
@@ -19,23 +22,69 @@ type SearchResult = {
 }
 
 const db = admin.firestore();
+const bucket = admin.storage().bucket();
 
-exports.storeUserData = functions.auth.user().onCreate((user: any) => {
+exports.storeUserData = functions.auth.user().onCreate(async (user: any) => {
     console.log("adding user...");
     console.log(user.toJSON());
     const name = user.displayName || user.user_name || null;
-    db.collection("users")
+    await db.collection("users")
         .doc(user.email)
         .set({
             uid: user.uid,
             email: user.email,
             displayName: name,
-            photoURL: user.photoURL,
             phoneNumber: user.phoneNumber,
             createdAt: new Date(user.metadata.creationTime)
         });
+    if (user.photoURL) {
+        const url = await uploadPhoto(user.photoURL, user.uid)
+        await savePhotoToProfile(url, user.email)
+    }
     return true;
 });
+
+async function savePhotoToProfile(url: string, email: string) {
+    console.log(email)
+    db.collection("users")
+        .doc(email)
+        .set({
+            photoURL: url
+        }, {merge: true})
+}
+
+async function uploadPhoto(url: string, uid: string) {
+    const oldPhoto =  await fetch(url);
+    const newPhoto = bucket.file("profileImgs/" + uid + ".jpeg" )
+
+    const contentType = oldPhoto.headers.get('content-type');
+    const writeStream = newPhoto.createWriteStream({
+        metadata: {
+            contentType
+        }
+    });
+    await oldPhoto.body.pipe(writeStream);
+
+    return (await newPhoto.getSignedUrl({
+        action: 'read',
+        expires: '03-09-2491'
+    }))[0]
+}
+
+exports.convertAllToJpg = functions.https.onRequest(
+    async (req: Request, response: Response) => {
+        const getAllUsers = await db
+            .collection("users").get()
+        const photos = await Promise.all(getAllUsers.docs.filter(doc => doc.data().photoURL)
+            .map(async (doc) => {
+                const url = await uploadPhoto(doc.data().photoURL, doc.data().uid)
+                await savePhotoToProfile(url, doc.data().email)
+                return url
+            }))
+        response.set("Access-Control-Allow-Origin", "*");
+        response.status(200).send(photos);
+    }
+);
 
 exports.landingPageForm = functions.https.onRequest(
     async (req: Request, response: Response) => {

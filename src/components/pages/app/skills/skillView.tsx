@@ -34,6 +34,7 @@ export const SkillView: React.FunctionComponent<SkillViewProps> = ({match, histo
                     Skill Description
                 </label>
             </div>
+
             {skill ?
                 <SingleSkillCardForUser skill={skill} email={match.params.email} expanded={true}/> : false}
         </div>
